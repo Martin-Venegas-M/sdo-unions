@@ -1,0 +1,485 @@
+---
+title: |
+  ![](../../input/images/logo_coes.png){width=25% height=25%}  
+  Análisis Comparación GOF - Mini Coes
+  
+subtitle: _Jutificación de la Desiguldad y Confianza en Sindicatos_
+author: 
+  - Asistente de Investigación
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+    bookdown::html_document2:
+          theme: yeti
+          toc: yes
+          toc_float: yes
+          toc_collapsed: yes
+          number_sections: yes
+          
+          
+    
+linkcolor: black
+urlcolor: blue
+link-citations: yes
+---
+
+<style type="text/css">
+
+h1, h2 {
+  font-size: 38px;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 18px;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  text-align: center;
+}
+</style>
+
+```{r include=FALSE}
+## Carga de paquetes
+
+if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
+
+pacman::p_load(tidyverse,
+               sjlabelled,
+               summarytools,
+               sjmisc,
+               sjPlot,
+               ggplot2,
+               knitr,
+               stargazer,
+               lavaan,
+               haven,
+               data.table,
+               kableExtra) # librerias
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment=NA, prompt=FALSE, cache=FALSE, echo=FALSE, results='asis', message = F, warning = F)
+summarytools::st_options(bootstrap.css     = FALSE,
+           plain.ascii       = FALSE,   
+           style             = "rmarkdown",
+           dfSummary.silent  = TRUE, 
+           footnote          = NA,
+           subtitle.emphasis = FALSE,
+           headings =  F,
+           lang =  "es")
+
+```
+
+```{r}
+sjPlot::set_theme(
+  base = theme_classic(),
+  axis.tickslen = 0, # hides tick marks
+  axis.title.size = .9,
+  axis.textsize = .9,
+  legend.size = .7,
+  legend.title.size = .8,
+  geom.label.size = 3.5
+)
+```
+
+```{r}
+# Cargar datos
+
+elsoc <- readRDS("../../input/data/elsoc_test_dom_index.RDS")
+```
+
+
+# Introducción
+
+```{r}
+######## PROCESAMIENTO #############
+
+# 7. Comparar indices -------------------
+# 7.1 Crear objetos de texto ----------------
+
+## Estimar varianza between
+bwcomp <- ' 
+# 1) Crear los componentes BETWEEM
+kappa =~ 1*dom_index1 + 1*dom_index2 + 1*dom_index3 + 1*dom_index4
+omega =~ 1*conf_sin1 + 1*conf_sin2 + 1*conf_sin3 + 1*conf_sin4
+rho =~ 1*conf_index1 + 1*conf_index2 + 1*conf_index3 + 1*conf_index4
+
+# 2) Crear los componentes WITHIN
+## OJO: Cada carga factorial se fija a 1
+DOM_INDEX1 =~ 1*dom_index1 
+DOM_INDEX2 =~ 1*dom_index2
+DOM_INDEX3 =~ 1*dom_index3
+DOM_INDEX4 =~ 1*dom_index4
+CS1 =~ 1*conf_sin1
+CS2 =~ 1*conf_sin2
+CS3 =~ 1*conf_sin3
+CS4 =~ 1*conf_sin4
+CONF_INDEX1 =~ 1*conf_index1
+CONF_INDEX2 =~ 1*conf_index2
+CONF_INDEX3 =~ 1*conf_index3
+CONF_INDEX4 =~ 1*conf_index4
+
+# # Constrenir las varianzas del error de medicion a cero
+# dom_index1 ~~ 0*dom_index1
+# dom_index2 ~~ 0*dom_index2
+# dom_index3 ~~ 0*dom_index3
+# dom_index4 ~~ 0*dom_index4
+# conf_sin1 ~~ 0*conf_sin1
+# conf_sin2 ~~ 0*conf_sin2
+# conf_sin3 ~~ 0*conf_sin3
+# conf_sin4 ~~ 0*conf_sin4
+# conf_index1 ~~ 0*conf_index1
+# conf_index2 ~~ 0*conf_index2
+# conf_index3 ~~ 0*conf_index3
+# conf_index4 ~~ 0*conf_index4
+'
+
+## Estimar varianza within
+varcov <- ' 
+# 4) Estimar la COVARIANZA entre los componentes w t=1
+DOM_INDEX1 ~~ CS1 
+CONF_INDEX1 ~~ CS1 
+DOM_INDEX1 ~~ CONF_INDEX1 
+
+# 5) Estimar las COVARIANZAS entre los residuos del componente WITHIN
+DOM_INDEX2 ~~ CS2
+CONF_INDEX2 ~~ CS2
+DOM_INDEX2 ~~ CONF_INDEX2
+
+DOM_INDEX3 ~~ CS3
+CONF_INDEX3 ~~ CS3
+DOM_INDEX3 ~~ CONF_INDEX3
+
+DOM_INDEX4 ~~ CS4
+CONF_INDEX4 ~~ CS4
+DOM_INDEX4 ~~ CONF_INDEX4
+
+# 6) Estimar las varianzas residuales del componente WITHIN
+DOM_INDEX1 ~~ DOM_INDEX1 ## Varianzas
+DOM_INDEX2 ~~ u2*DOM_INDEX2 ## Varianzas residuales
+DOM_INDEX3 ~~ u3*DOM_INDEX3
+DOM_INDEX4 ~~ u4*DOM_INDEX4
+
+CS1 ~~ CS1 # Varianzas
+CS2 ~~ v2*CS2
+CS3 ~~ v3*CS3
+CS4 ~~ v4*CS4
+
+CONF_INDEX1 ~~ CONF_INDEX1 # Varianzas
+CONF_INDEX2 ~~ h2*CONF_INDEX2
+CONF_INDEX3 ~~ h3*CONF_INDEX3
+CONF_INDEX4 ~~ h4*CONF_INDEX4
+
+# 7) Estimar la VARIANZA y COVARIANZA entre los RI. 
+kappa ~~ kappa 
+omega ~~ omega 
+kappa ~~ omega 
+rho ~~ rho
+rho ~~ omega
+rho ~~ kappa
+
+# 8) Constreñir las varianzas del error de medición a cero
+## NO SE HACE MANUAL, PERO SE CALCULA AUTOMATICO
+
+
+
+
+
+
+
+
+# 9) Fijar la correlacion entre los RI y componentes within t=1 a cero 
+##  NO SE HACE, NISIQUIERA AUTOMATICO
+          '
+
+## Estimar regresiones
+
+### Autoregresivos: Libres
+a1 <- '
+
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha4*DOM_INDEX3
+DOM_INDEX3 ~ alpha3*DOM_INDEX2
+DOM_INDEX2 ~ alpha2*DOM_INDEX1
+
+## Backward
+CS4 ~ delta4*CS3
+CS3 ~ delta3*CS2
+CS2 ~ delta2*CS1
+
+## Control
+CONF_INDEX4 ~  eta4*CONF_INDEX3
+CONF_INDEX3 ~  eta3*CONF_INDEX2
+CONF_INDEX2 ~  eta2*CONF_INDEX1
+
+'
+
+### Autoregresivos: constreñidos
+a2 <- '
+
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha*DOM_INDEX3
+DOM_INDEX3 ~ alpha*DOM_INDEX2 
+DOM_INDEX2 ~ alpha*DOM_INDEX1
+
+## Backward
+CS4 ~ delta*CS3
+CS3 ~ delta*CS2
+CS2 ~ delta*CS1
+
+## Control
+CONF_INDEX4 ~  eta*CONF_INDEX3
+CONF_INDEX3 ~  eta*CONF_INDEX2
+CONF_INDEX2 ~  eta*CONF_INDEX1
+
+'
+
+### Forward: libres
+b1 <- '
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha4*DOM_INDEX3 + beta4*CS3 + gamma4*CONF_INDEX3
+DOM_INDEX3 ~ alpha3*DOM_INDEX2 + beta3*CS2 + gamma3*CONF_INDEX2
+DOM_INDEX2 ~ alpha2*DOM_INDEX1 + beta2*CS1 + gamma2*CONF_INDEX1
+
+## Backward
+CS4 ~ delta4*CS3
+CS3 ~ delta3*CS2
+CS2 ~ delta2*CS1
+
+## Control
+CONF_INDEX4 ~  eta4*CONF_INDEX3
+CONF_INDEX3 ~  eta3*CONF_INDEX2
+CONF_INDEX2 ~  eta2*CONF_INDEX1
+'
+
+### Forward: constreñidos
+b2 <- '
+
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha*DOM_INDEX3 + beta*CS3 + gamma*CONF_INDEX3
+DOM_INDEX3 ~ alpha*DOM_INDEX2 + beta*CS2 + gamma*CONF_INDEX2
+DOM_INDEX2 ~ alpha*DOM_INDEX1 + beta*CS1 + gamma*CONF_INDEX1
+
+## Backward
+CS4 ~ delta*CS3
+CS3 ~ delta*CS2
+CS2 ~ delta*CS1
+
+## Control
+CONF_INDEX4 ~  eta*CONF_INDEX3
+CONF_INDEX3 ~  eta*CONF_INDEX2
+CONF_INDEX2 ~  eta*CONF_INDEX1
+'
+
+### Backward: libres
+c1 <- '
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha4*DOM_INDEX3
+DOM_INDEX3 ~ alpha3*DOM_INDEX2
+DOM_INDEX2 ~ alpha2*DOM_INDEX1
+
+## Backward
+CS4 ~ delta4*CS3 + epsilon4*DOM_INDEX3 + zeta4*CONF_INDEX3
+CS3 ~ delta3*CS2 + epsilon3*DOM_INDEX2 + zeta3*CONF_INDEX2
+CS2 ~ delta2*CS1 + epsilon2*DOM_INDEX1 + zeta2*CONF_INDEX1
+
+## Control
+CONF_INDEX4 ~  eta4*CONF_INDEX3
+CONF_INDEX3 ~  eta3*CONF_INDEX2
+CONF_INDEX2 ~  eta2*CONF_INDEX1
+'
+
+### Backward: constreñidos
+c2 <- '
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha*DOM_INDEX3
+DOM_INDEX3 ~ alpha*DOM_INDEX2
+DOM_INDEX2 ~ alpha*DOM_INDEX1
+
+## Backward
+CS4 ~ delta*CS3 + epsilon*DOM_INDEX3 + zeta*CONF_INDEX3
+CS3 ~ delta*CS2 + epsilon*DOM_INDEX2 + zeta*CONF_INDEX2
+CS2 ~ delta*CS1 + epsilon*DOM_INDEX1 + zeta*CONF_INDEX1
+
+## Control
+CONF_INDEX4 ~  eta*CONF_INDEX3
+CONF_INDEX3 ~  eta*CONF_INDEX2
+CONF_INDEX2 ~  eta*CONF_INDEX1
+'
+
+### Bidrectional: libres
+d1 <- '
+
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha4*DOM_INDEX3 + beta4*CS3 + gamma4*CONF_INDEX3
+DOM_INDEX3 ~ alpha3*DOM_INDEX2 + beta3*CS2 + gamma3*CONF_INDEX2
+DOM_INDEX2 ~ alpha2*DOM_INDEX1 + beta2*CS1 + gamma2*CONF_INDEX1
+
+## Backward
+CS4 ~ delta4*CS3 + epsilon4*DOM_INDEX3 + zeta4*CONF_INDEX3
+CS3 ~ delta3*CS2 + epsilon3*DOM_INDEX2 + zeta3*CONF_INDEX2
+CS2 ~ delta2*CS1 + epsilon2*DOM_INDEX1 + zeta2*CONF_INDEX1
+
+## Control
+CONF_INDEX4 ~  eta4*CONF_INDEX3 + theta4*DOM_INDEX3 + iota4*CS3
+CONF_INDEX3 ~  eta3*CONF_INDEX2 + theta3*DOM_INDEX2 + iota3*CS2
+CONF_INDEX2 ~  eta2*CONF_INDEX1 + theta2*DOM_INDEX1 + iota2*CS1
+'
+
+### Bidrectional: contreñidos
+d2 <- '
+
+# 3) Estimar los EFECTOS LAGGED
+
+## Forward
+DOM_INDEX4 ~ alpha*DOM_INDEX3 + beta*CS3 + gamma*CONF_INDEX3
+DOM_INDEX3 ~ alpha*DOM_INDEX2 + beta*CS2 + gamma*CONF_INDEX2
+DOM_INDEX2 ~ alpha*DOM_INDEX1 + beta*CS1 + gamma*CONF_INDEX1
+
+## Backward
+CS4 ~ delta*CS3 + epsilon*DOM_INDEX3 + zeta*CONF_INDEX3
+CS3 ~ delta*CS2 + epsilon*DOM_INDEX2 + zeta*CONF_INDEX2
+CS2 ~ delta*CS1 + epsilon*DOM_INDEX1 + zeta*CONF_INDEX1
+
+## Control
+CONF_INDEX4 ~  eta*CONF_INDEX3 + theta*DOM_INDEX3 + iota*CS3
+CONF_INDEX3 ~  eta*CONF_INDEX2 + theta*DOM_INDEX2 + iota*CS2
+CONF_INDEX2 ~  eta*CONF_INDEX1 + theta*DOM_INDEX1 + iota*CS1
+'
+
+# 7.2 Crear GOF ----------------
+
+### Vector con los modelos
+models <- c("a1","a2","b1","b2","c1","c2","d1","d2")
+
+### Estimar cada modelo dentro de un for loop
+
+fit <- list() # Crear lista vacia para almacenar los objetos lavaan
+
+for (i in models){
+  fit[[i]] <- lavaan(model = c(bwcomp,get(i),varcov),
+                     data = elsoc, 
+                     estimator = "MLR", 
+                     missing = "FIML",
+                     meanstructure = T, 
+                     int.ov.free = T) # Ejecutar estimación
+}
+
+### Guardar los GOF de cada modelo en una lista a partir de un for loop
+
+gofdt <- list() # Crear lista vacia
+
+for (i in names(fit)){
+  x <- fitMeasures(fit[[i]])[c("chisq.scaled","df.scaled","pvalue.scaled","cfi.scaled","tli.scaled","rmsea.scaled",
+                               "srmr_mplus","aic","bic","bic2","logl","npar","scaling.factor.h0")]
+  gofdt[[i]] <- setNames(as.numeric(x),
+                         c("X2","df","pvalue","CFI","TLI","RMSEA","SRMR","AIC","BIC","aBIC","LL","par","LLcorrectf"))} # Extraer gof indices
+
+gofdt <- data.table(m=names(gofdt),dplyr::bind_rows(gofdt)) # Pasar a formato datatable los gof indices
+
+# 7.3 Comparar GOF ---------------
+
+### Crear funcion
+
+gof.comp  = function(data, pairs,
+                     measures = c("CFI","TLI","RMSEA","SRMR",
+                                  "AIC","BIC","aBIC","par","LL")){
+  comp <- list()
+  for (i in 1:length(pairs)){
+    gof <- data
+    nest <- pairs[[i]][1]
+    full <- pairs[[i]][2]
+    delta <- NULL
+    for (k in measures){
+      delta[paste0(k,"_D")] <- gof[m==nest, get(k)] - gof[m==full, get(k)]
+    }
+    par_LLcorf_nest <- gof[m==nest,par]*gof[m==nest,LLcorrectf]
+    par_LLcorf_full <- gof[m==full,par]*gof[m==full,LLcorrectf]
+    delta["CD"] <- (par_LLcorf_nest-par_LLcorf_full)/delta["par_D"]
+    delta["TRd"] <- (-2*delta["LL_D"])/delta["CD"]
+    delta["TRd_df"] <- gof[m==full, "par"] - gof[m==nest, "par"]
+    delta["TRd_pvalue"] <- pchisq(as.numeric(delta["TRd"]),
+                                  as.numeric(delta["TRd_df"]), lower.tail = F)
+    comp[[paste0(nest," vs. ",full,sep="")]] <- delta
+  }
+  comp <- data.table(comp=names(comp),dplyr::bind_rows(comp))
+  return(comp)
+}
+
+### Testear modelos 1 y 2
+
+comp1 <- gof.comp(data = gofdt, pairs = list(c("a2","a1"),c("b2","b1"),c("c2","c1"),c("d2","d1")))
+
+### Testear modelos A-D
+
+comp2 <- gof.comp(data = gofdt, pairs = list(c("a2","b2"),c("a2","c2"),c("a2","d2"),c("b2","d2"),c("c2","d2")))
+```
+
+# Análisis
+
+## Medidas de ajuste
+
+```{r}
+kableExtra::kable(gofdt,digits = 2) %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+```
+
+## Comparación medidas de ajuste (entre modelos libres y constreñidos)
+```{r}
+kableExtra::kable(comp1,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+
+```
+
+## Comparación medidas de ajuste entre (modelos A-D)
+```{r}
+kable(comp2,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+```
+
+## Interpretaciones modelo D1
+
+```{r}
+param_d1 <- data.table(parameterEstimates(fit[["d1"]]))
+
+kable(param_d1[op=="~~" & rhs %in% c("kappa","omega", "rho"), !"label"], digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+```
+
+
+
+## Interpretaciones modelo D2
+
+```{r}
+param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
+
+kable(param_d2[op=="~~" & rhs %in% c("kappa","omega", "rho"), !"label"], digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+```
+
+```{r}
+kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(25:33)] & lhs %in% param_d1$lhs[c(25:33)] , !"label"],
+      digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
+  row_spec(c(2, 5, 8), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+```
+
+```{r}
+kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(25:33)] & lhs %in% param_d2$lhs[c(25:33)] , !"label"],
+      digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
+  row_spec(c(2,5,8), bold = T, color = "white", background = "#9CE599")
+```
+
+# Sintesis
+
+
