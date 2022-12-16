@@ -97,18 +97,18 @@ elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
 # Introduction
 
 ```{r}
-######## PROCESAMIENTO #############
+######## PROCESSING #############
 
-# 7. Comparar indices -------------------
-# 7.1 Crear objetos de texto ----------------
+# 7. Compare indices -------------------
+# 7.1 Create text objects ----------------
 
-## Estimar varianza between
+## Estimate variance between
 bwcomp <- ' 
-    # Crear los componentes between
+    # Create the between components
     RI_x =~ 1*dom_index1 + 1*dom_index2 + 1*dom_index3 + 1*dom_index4
     RI_y =~ 1*conf_sin1 + 1*conf_sin2 + 1*conf_sin3 + 1*conf_sin4
     
-    # Crear los componentes within
+    # Create the components within
     DOM_INDEX1 =~ 1*dom_index1
     DOM_INDEX2 =~ 1*dom_index2
     DOM_INDEX3 =~ 1*dom_index3
@@ -121,7 +121,7 @@ bwcomp <- '
     CS4 =~ 1*conf_sin4
 
     
-    # Constrenir las varianzas del error de medicion a cero
+    # Construct the measurement error variances to zero
     dom_index1 ~~ 0*dom_index1
     dom_index2 ~~ 0*dom_index2
     dom_index3 ~~ 0*dom_index3
@@ -132,41 +132,41 @@ bwcomp <- '
     conf_sin4 ~~ 0*conf_sin4
           '
 
-## Estimar varianza within
+## Estimate variance within
 varcov <- ' 
-    # Estimar la covarianza entre los componentes within t=1
+    # Estimate the covariance between the components within t=1
     DOM_INDEX1 ~~ CS1
     
-    # Estimar las covarianzas entre los residuos del componente within
+    # Estimate the covariances between the residuals of the within component.
     DOM_INDEX2 ~~ CS2
     DOM_INDEX3 ~~ CS3
     DOM_INDEX4 ~~ CS4
     
-    # Estimar las varianzas residuales del componente within
-    DOM_INDEX1 ~~ DOM_INDEX1 # Varianzas
+    # Estimate the residual variances of the within component
+    DOM_INDEX1 ~~ DOM_INDEX1 # Variances
     CS1 ~~ CS1 
-    DOM_INDEX2 ~~ DOM_INDEX2 # Varianzas residuales
+    DOM_INDEX2 ~~ DOM_INDEX2 # Residual variances
     CS2 ~~ CS2 
     DOM_INDEX3 ~~ DOM_INDEX3 
     CS3 ~~ CS3 
     DOM_INDEX4 ~~ DOM_INDEX4 
     CS4 ~~ CS4 
     
-    # Estimar la varianza y covarianza entre los RI. 
+    # Estimate the variance and covariance between RIs.
     RI_x ~~ RI_x
     RI_y ~~ RI_y
     RI_x ~~ RI_y
     
-    # Fijar la correlacion entre los RI y componentes within t=1 a cero 
+    # Set the correlation between the RI and components within t=1 to zero
     RI_x ~~ 0*DOM_INDEX1
     RI_x ~~ 0*CS1
     RI_y ~~ 0*DOM_INDEX1
     RI_y ~~ 0*CS1 
           '
 
-## Estimar regresiones
+## Estimating regressions
 
-### Autoregresivos: Libres
+### Autoregressive: Free
 a1 <- '
     DOM_INDEX2 ~ DOM_INDEX1
     DOM_INDEX3 ~ DOM_INDEX2
@@ -176,7 +176,7 @@ a1 <- '
     CS4 ~ CS3
 '
 
-### Autoregresivos: constreñidos
+### Autoregressive: constrained
 a2 <- '
     DOM_INDEX2 ~ a*DOM_INDEX1
     DOM_INDEX3 ~ a*DOM_INDEX2
@@ -186,7 +186,7 @@ a2 <- '
     CS4 ~ d*CS3
 '
 
-### Forward: libres
+### Forward: free
 b1 <- '
     DOM_INDEX2 ~ DOM_INDEX1                  
     DOM_INDEX3 ~ DOM_INDEX2
@@ -196,7 +196,7 @@ b1 <- '
     CS4 ~ DOM_INDEX3 + CS3
 '
 
-### Forward: constreñidos
+### Forward: constrained
 b2 <- '
     DOM_INDEX2 ~ a*DOM_INDEX1                  
     DOM_INDEX3 ~ a*DOM_INDEX2
@@ -206,7 +206,7 @@ b2 <- '
     CS4 ~ c*DOM_INDEX3 + d*CS3
 '
 
-### Backward: libres
+### Backward: free
 c1 <- '
     DOM_INDEX2 ~ DOM_INDEX1 + CS1                  
     DOM_INDEX3 ~ DOM_INDEX2 + CS2
@@ -216,7 +216,7 @@ c1 <- '
     CS4 ~ CS3
 '
 
-### Backward: constreñidos
+### Backward: constrained
 c2 <- '
     DOM_INDEX2 ~ a*DOM_INDEX1 + b*CS1                  
     DOM_INDEX3 ~ a*DOM_INDEX2 + b*CS2
@@ -226,7 +226,7 @@ c2 <- '
     CS4 ~ d*CS3
 '
 
-### Bidrectional: libres
+### Bidrectional: free
 d1 <- '
     DOM_INDEX2 ~ DOM_INDEX1 + CS1                  
     DOM_INDEX3 ~ DOM_INDEX2 + CS2
@@ -236,7 +236,7 @@ d1 <- '
     CS4 ~ DOM_INDEX3 + CS3
 '
 
-### Bidrectional: libres
+### Bidrectional: Constrained
 d2 <- '
     DOM_INDEX2 ~ a*DOM_INDEX1 + b*CS1                  
     DOM_INDEX3 ~ a*DOM_INDEX2 + b*CS2
@@ -246,14 +246,14 @@ d2 <- '
     CS4 ~ c*DOM_INDEX3 + d*CS3
 '
 
-# 7.2 Crear GOF ----------------
+# 7.2 Create GOF ----------------
 
-### Vector con los modelos
+### Vector with models
 models <- c("a1","a2","b1","b2","c1","c2","d1","d2")
 
-### Estimar cada modelo dentro de un for loop
+### Estimate each model within a for loop
 
-fit <- list() # Crear lista vacia para almacenar los objetos lavaan
+fit <- list() # Create empty list for storing lavaan objects
 
 for (i in models){
   fit[[i]] <- lavaan(model = c(bwcomp,get(i),varcov),
@@ -261,10 +261,10 @@ for (i in models){
                      estimator = "MLR", 
                      missing = "FIML",
                      meanstructure = T, 
-                     int.ov.free = T) # Ejecutar estimación
+                     int.ov.free = T) # Execute estimate
 }
 
-### Guardar los GOF de cada modelo en una lista a partir de un for loop
+### Save the GOFs of each model in a list from a for loop.
 
 gofdt <- list() # Crear lista vacia
 
@@ -272,13 +272,13 @@ for (i in names(fit)){
   x <- fitMeasures(fit[[i]])[c("chisq.scaled","df.scaled","pvalue.scaled","cfi.scaled","tli.scaled","rmsea.scaled",
                                "srmr_mplus","aic","bic","bic2","logl","npar","scaling.factor.h0")]
   gofdt[[i]] <- setNames(as.numeric(x),
-                         c("X2","df","pvalue","CFI","TLI","RMSEA","SRMR","AIC","BIC","aBIC","LL","par","LLcorrectf"))} # Extraer gof indices
+                         c("X2","df","pvalue","CFI","TLI","RMSEA","SRMR","AIC","BIC","aBIC","LL","par","LLcorrectf"))} # Extract gof indexes
 
-gofdt <- data.table(m=names(gofdt),dplyr::bind_rows(gofdt)) # Pasar a formato datatable los gof indices
+gofdt <- data.table(m=names(gofdt),dplyr::bind_rows(gofdt)) # Transfer to datatable format the gof indexes
 
-# 7.3 Comparar GOF ---------------
+# 7.3 Compare GOF ---------------
 
-### Crear funcion
+### Create function
 
 gof.comp  = function(data, pairs,
                      measures = c("CFI","TLI","RMSEA","SRMR",
@@ -305,35 +305,35 @@ gof.comp  = function(data, pairs,
   return(comp)
 }
 
-### Testear modelos 1 y 2
+### Test models 1 and 2
 
 comp1 <- gof.comp(data = gofdt, pairs = list(c("a2","a1"),c("b2","b1"),c("c2","c1"),c("d2","d1")))
 
-### Testear modelos A-D
+### Test models A-D
 
 comp2 <- gof.comp(data = gofdt, pairs = list(c("a2","b2"),c("a2","c2"),c("a2","d2"),c("b2","d2"),c("c2","d2")))
 ```
 
-# Análisis
+# Analysis
 
-## Medidas de ajuste
+## Fit measures
 
 ```{r}
 kableExtra::kable(gofdt,digits = 2) %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-## Comparación medidas de ajuste (entre modelos libres y constreñidos)
+## Comparison of fit measures (between unconstrained and constrained models)
 ```{r}
 kableExtra::kable(comp1,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 
 ```
 
-## Comparación medidas de ajuste entre (modelos A-D)
+## Comparison of fit measures between (models A-D)
 ```{r}
 kable(comp2,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-## Interpretaciones modelo C1
+## Interpretations model C1
 
 ```{r}
 param_c1 <- data.table(parameterEstimates(fit[["c1"]]))
@@ -349,7 +349,7 @@ kable(param_c1[op=="~" & rhs %in% param_c1$rhs[c(25:33)] & lhs %in% param_c1$lhs
   row_spec(6, bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-## Interpretaciones modelo D2
+## Model D2 interpretations
 
 ```{r}
 param_c2 <- data.table(parameterEstimates(fit[["c2"]]))
@@ -365,6 +365,5 @@ kable(param_c2[op=="~" & rhs %in% param_c2$rhs[c(25:33)] & lhs %in% param_c2$lhs
 ```
 
 
-# Sintesis
-
+# Synthesis
 
