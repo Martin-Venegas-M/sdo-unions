@@ -96,6 +96,8 @@ elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
 
 # Introduction
 
+This document contains the basic model for RI-CLPM analysis for article about social dominance orientations and trust in trade unions. First, fit measures are showed for all calculated models. Second, fit mesasures of unconstrained and constrained models are compared. Third, fit measures are compared between models. Fourth, coefficients of the chosen model are interpretated. At the end of the document principal findigs are synthetized.
+
 ```{r}
 ######## PROCESSING #############
 
@@ -315,55 +317,73 @@ comp2 <- gof.comp(data = gofdt, pairs = list(c("a2","b2"),c("a2","c2"),c("a2","d
 ```
 
 # Analysis
-
 ## Fit measures
 
-```{r}
-kableExtra::kable(gofdt,digits = 2) %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+
+```{r fit}
+kableExtra::kable(gofdt,digits = 3,
+                  caption = "Fit measueres for RI-CLPM models between SDO & Trust in Trade Unions") %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-## Comparison of fit measures (between unconstrained and constrained models)
-```{r}
-kableExtra::kable(comp1,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+At the Table \@ref(tab:fit) git measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.99.
+
+```{r fit-comp}
+kableExtra::kable(comp1,digits = 3,
+                  caption = "Comparison of fit measures (between unconstrained and constrained models)") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 
 ```
 
-## Comparison of fit measures between (models A-D)
-```{r}
-kable(comp2,digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+At the Table \@ref(tab:fit-comp) fit measures of unconstrained and constrained models are showed. Following Rutkowski & Svetina (2014) and Chen (2007) all differences suggest that unconstrained models should be retained (ΔCFI < 0.02, ΔRMSEA < 0.03).
+
+```{r fit-comp2}
+kable(comp2,digits = 3,
+      caption = "Comparison of fit measures between (models A-D)") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-## Interpretations model C1
+At the Table \@ref(tab:fit-comp2)
 
-```{r}
-param_c1 <- data.table(parameterEstimates(fit[["c1"]]))
+## Interpretations
 
-kable(param_c1[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+```{r bw1}
+param_d1 <- data.table(parameterEstimates(fit[["d1"]]))
+
+kable(param_d1[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
+      caption = "D1 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-```{r}
-kable(param_c1[op=="~" & rhs %in% param_c1$rhs[c(25:33)] & lhs %in% param_c1$lhs[c(25:33)] , !"label"],
-      digits = 3) %>% 
+At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation[^1].
+
+[^1]: If the variance were not different from 0, it would mean that there are very few stable differences between units and that each individual fluctuates around the same grand mean over time.
+
+```{r w1}
+kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(25:33)] & lhs %in% param_d1$lhs[c(25:33)] , !"label"],
+      digits = 3,
+      caption = "D1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
   row_spec(4, bold = T, color = "white", background = "#9CE599") %>% # Añadir destacado
   row_spec(6, bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-## Model D2 interpretations
+At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a negative deviation of 0.035 in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of -0.044.
 
-```{r}
-param_c2 <- data.table(parameterEstimates(fit[["c2"]]))
+```{r bw2}
+param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
 
-kable(param_c2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3) %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kable(param_d2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
+            caption = "D2 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-```{r}
-kable(param_c2[op=="~" & rhs %in% param_c2$rhs[c(25:33)] & lhs %in% param_c2$lhs[c(25:33)] , !"label"],
-      digits = 3) %>% 
+At the Table \@ref(tab:bw2) estimates for the random intercepts of constrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation.
+
+```{r w2}
+kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(25:33)] & lhs %in% param_d2$lhs[c(25:33)] , !"label"],
+      digits = 3,
+      caption = "D2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
   row_spec(c(2,4,6), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
+At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of 0.029 in SDO during the next measurement, controlling for deviations from the expected score in SDO.
 
 # Synthesis
 
