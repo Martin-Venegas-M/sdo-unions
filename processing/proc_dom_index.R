@@ -483,6 +483,17 @@ frq(elsoc$ingresos2)
 frq(elsoc$ingresos3)
 frq(elsoc$ingresos4)
 
+# 4.9 Ideología ----
+
+elsoc <- elsoc %>% 
+  mutate_at(vars(starts_with("ideol")),
+            ~ car::recode(., "c(-666,-777,-888,-999,11,12) = NA"))
+
+frq(elsoc$ideol1)
+frq(elsoc$ideol2)
+frq(elsoc$ideol3)
+frq(elsoc$ideol4)
+
 # 5. Save database ----------------
 
 saveRDS(elsoc, "input/data/proc/elsoc_dom_index.RDS")
