@@ -483,6 +483,18 @@ frq(elsoc$ingresos2)
 frq(elsoc$ingresos3)
 frq(elsoc$ingresos4)
 
+## Make deciles
+
+elsoc$decile1 <- ntile(elsoc$ingresos1, 10)
+elsoc$decile2 <- ntile(elsoc$ingresos2, 10)
+elsoc$decile3 <- ntile(elsoc$ingresos3, 10)
+elsoc$decile4 <- ntile(elsoc$ingresos4, 10)
+
+frq(elsoc$decile1)
+frq(elsoc$decile2)
+frq(elsoc$decile3)
+frq(elsoc$decile4)
+
 # 4.9 Ideología ----
 
 elsoc <- elsoc %>% 
