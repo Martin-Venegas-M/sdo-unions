@@ -325,7 +325,7 @@ kableExtra::kable(gofdt,digits = 3,
                   caption = "Fit measueres for RI-CLPM models between SDO & Trust in Trade Unions") %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-At the Table \@ref(tab:fit) git measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.99.
+At the Table \@ref(tab:fit) fit measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.99.
 
 ```{r fit-comp}
 kableExtra::kable(comp1,digits = 3,
@@ -364,7 +364,7 @@ kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(25:33)] & lhs %in% param_d1$lhs
   row_spec(6, bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a negative deviation of 0.035 in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of -0.044.
+At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX3" & param_d1$rhs == "CS2"],3)`.
 
 ```{r bw2}
 param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
@@ -383,7 +383,7 @@ kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(25:33)] & lhs %in% param_d2$lhs
   row_spec(c(2,4,6), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of 0.029 in SDO during the next measurement, controlling for deviations from the expected score in SDO.
+At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of `r round(param_d2$est[param_d2$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in SDO.
 
 # Synthesis
 

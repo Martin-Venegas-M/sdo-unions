@@ -364,14 +364,14 @@ At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstraine
 [^1]: If the variance were not different from 0, it would mean that there are very few stable differences between units and that each individual fluctuates around the same grand mean over time.
 
 ```{r w1}
-kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(33:41)] & lhs %in% param_d1$lhs[c(33:41)] , !"label"],
+kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(25:28, 33:38)] & lhs %in% param_d1$lhs[c(25:28, 33:38)] , !"label"],
       digits = 3,
       caption = "D1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(c(5,8), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(8,10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 2. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a negative deviation of 0.043 in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions. Between wave 2 and 3 de effect is similar, with a coefficient of -0.048.
+At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 2. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions. Between wave 2 and 3 de effect is similar, with a coefficient of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX3" & param_d1$rhs == "CS2"],3)`.
 
 ```{r bw2}
 param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
@@ -383,14 +383,14 @@ kable(param_d2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
 At the Table \@ref(tab:bw2) estimates for the random intercepts of constrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation.
 
 ```{r w2}
-kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(33:41)] & lhs %in% param_d2$lhs[c(33:41)] , !"label"],
+kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(25:28, 33:38)] & lhs %in% param_d2$lhs[c(25:28, 33:38)] , !"label"],
       digits = 3,
       caption = "D2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(c(2,5,8), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(6,8,10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
-At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of 0.037 in SDO during the next measurement, controlling for deviations from the expected score in SDO and trust in institutions.
+At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of `r round(param_d2$est[param_d2$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in SDO and trust in institutions.
 
 # Synthesis
 
