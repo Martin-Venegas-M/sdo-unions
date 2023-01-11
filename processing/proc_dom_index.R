@@ -43,6 +43,11 @@ elsoc <- elsoc_wide_2016_2021 %>% select(idencuesta,
                                          dom_soc_ideal3 = c18_01_w03,
                                          dom_soc_ideal4 = c18_01_w04,
                                          
+                                         dom_grupos_inferiores1 = c18_12_w01,
+                                         dom_grupos_inferiores2 = c18_12_w02,
+                                         dom_grupos_inferiores3 = c18_12_w03,
+                                         dom_grupos_inferiores4 = c18_12_w04,
+                                         
                                          dom_oportunidad_exito1 = c18_02_w01,
                                          dom_oportunidad_exito2 = c18_02_w02,
                                          dom_oportunidad_exito3 = c18_02_w03,
@@ -239,6 +244,11 @@ frq(elsoc$dom_soc_ideal2)
 frq(elsoc$dom_soc_ideal3)
 frq(elsoc$dom_soc_ideal4)
 
+frq(elsoc$dom_grupos_inferiores1)
+frq(elsoc$dom_grupos_inferiores2)
+frq(elsoc$dom_grupos_inferiores3)
+frq(elsoc$dom_grupos_inferiores4)
+
 frq(elsoc$dom_oportunidad_exito1)
 frq(elsoc$dom_oportunidad_exito2)
 frq(elsoc$dom_oportunidad_exito3)
@@ -371,19 +381,19 @@ frq(elsoc$dom_condiciones_iguales4)
 ### Create variables
 
 # T1
-elsoc <- elsoc %>% rowwise() %>% mutate(dom_index1 = sum(dom_soc_ideal1, dom_oportunidad_exito1, dom_condiciones_iguales1)/3) # Promediar indicadores
+elsoc <- elsoc %>% rowwise() %>% mutate(dom_index1 = sum(dom_soc_ideal1, dom_grupos_inferiores1, dom_oportunidad_exito1, dom_condiciones_iguales1)/3) # Promediar indicadores
 #elsoc$dom_index1 <- (elsoc$dom_index1-min(elsoc$dom_index1))/(max(elsoc$dom_index1)-min(elsoc$dom_index1))*100 # Estandarizar
 
 # T2
-elsoc <- elsoc %>% rowwise() %>% mutate(dom_index2 = sum(dom_soc_ideal2, dom_oportunidad_exito2, dom_condiciones_iguales2)/3) # Promediar indicadores
+elsoc <- elsoc %>% rowwise() %>% mutate(dom_index2 = sum(dom_soc_ideal2, dom_grupos_inferiores2, dom_oportunidad_exito2, dom_condiciones_iguales2)/3) # Promediar indicadores
 #elsoc$dom_index2 <- (elsoc$dom_index2-min(elsoc$dom_index2))/(max(elsoc$dom_index2)-min(elsoc$dom_index2))*100 # Estandarizar
 
 # T3
-elsoc <- elsoc %>% rowwise() %>% mutate(dom_index3 = sum(dom_soc_ideal3, dom_oportunidad_exito3, dom_condiciones_iguales3)/3) # Promediar indicadores
+elsoc <- elsoc %>% rowwise() %>% mutate(dom_index3 = sum(dom_soc_ideal3, dom_grupos_inferiores3, dom_oportunidad_exito3, dom_condiciones_iguales3)/3) # Promediar indicadores
 #elsoc$dom_index3 <- (elsoc$dom_index3-min(elsoc$dom_index3))/(max(elsoc$dom_index3)-min(elsoc$dom_index3))*100 # Estandarizar
 
 # T4
-elsoc <- elsoc %>% rowwise() %>% mutate(dom_index4 = sum(dom_soc_ideal4, dom_oportunidad_exito4, dom_condiciones_iguales4)/3) # Promediar indicadores
+elsoc <- elsoc %>% rowwise() %>% mutate(dom_index4 = sum(dom_soc_ideal4, dom_grupos_inferiores4, dom_oportunidad_exito4, dom_condiciones_iguales4)/3) # Promediar indicadores
 #elsoc$dom_index4 <- (elsoc$dom_index4-min(elsoc$dom_index4))/(max(elsoc$dom_index4)-min(elsoc$dom_index4))*100 # Estandarizar
 
 ## Label
