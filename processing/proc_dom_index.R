@@ -506,17 +506,39 @@ frq(elsoc$ingresos2)
 frq(elsoc$ingresos3)
 frq(elsoc$ingresos4)
 
-## Make deciles
+## Make income brackets
 
-elsoc$decile1 <- ntile(elsoc$ingresos1, 10)
-elsoc$decile2 <- ntile(elsoc$ingresos2, 10)
-elsoc$decile3 <- ntile(elsoc$ingresos3, 10)
-elsoc$decile4 <- ntile(elsoc$ingresos4, 10)
 
-frq(elsoc$decile1)
-frq(elsoc$decile2)
-frq(elsoc$decile3)
-frq(elsoc$decile4)
+elsoc <- elsoc %>% 
+  mutate_at(vars(starts_with("ingresos")),
+            ~ car::recode(., "
+                          NA = NA;
+                          0:220000=1;
+                          220001:280000=2;
+                          280001:330000=3;
+                          330001:380000=4;
+                          380001:420000=5;
+                          420001:470000=6;
+                          470001:510000=7;
+                          510001:560000=8;
+                          560001:610000=9;
+                          610001:670000=10;
+                          670001:730000=11;
+                          730001:800000=12;
+                          800001:890000=13;
+                          890001:980000=14;
+                          980001:1100000=15;
+                          1100001:1260000=16;
+                          1260001:1490000=17;
+                          1490001:1850000=18;
+                          1850001:2700000=19;
+                          else = 20
+                          "))
+
+frq(elsoc$ingresos1)
+frq(elsoc$ingresos2)
+frq(elsoc$ingresos3)
+frq(elsoc$ingresos4)
 
 # 4.9 Ideología ----
 
