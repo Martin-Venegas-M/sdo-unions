@@ -1,14 +1,14 @@
 ---
 title: |
   ![](../../input/images/logo_coes.png){width=25% height=25%}  
-  RI-CLPM Control Model 7 (Full): SDO & Trust in Trade Unions
+  CLPM Control Model 7 (Full): SDO & Trust in Trade Unions
   
 subtitle: _Mini Coes Project - Jutification of Inequality & Trust in Trade Unions_
 author: 
   - Research Asisstant
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 knit: (function(inputFile, encoding) {
-      out_dir <- "../../output/docs/RICLPM-Controls-Model";
+      out_dir <- "../../output/docs/CLPM-Controls-Model";
       rmarkdown::render(inputFile,
                         encoding=encoding,
                         output_dir=file.path(dirname(inputFile), out_dir))})
@@ -107,12 +107,12 @@ This document contains full model for RI-CLPM analysis for article about social 
 ## Estimate variance between
 bwcomp <- ' 
     # Create the between components
-    RI_x =~ 1*dom_index1 + 1*dom_index2 + 1*dom_index3 + 1*dom_index4
-    RI_y =~ 1*conf_sin1 + 1*conf_sin2 + 1*conf_sin3 + 1*conf_sin4
-    RI_z =~ 1*conf_index1 + 1*conf_index2 + 1*conf_index3 + 1*conf_index4
-    RI_w =~ 1*ideol1 + 1*ideol2 + 1*ideol3 + 1*ideol4
-    RI_v =~ 1*ingresos1 + 1*ingresos2 + 1*ingresos3 + 1*ingresos4
-    RI_t =~ 1*educ1 + 1*educ2 + 1*educ3 + 1*educ4
+    # RI_x =~ 1*dom_index1 + 1*dom_index2 + 1*dom_index3 + 1*dom_index4
+    # RI_y =~ 1*conf_sin1 + 1*conf_sin2 + 1*conf_sin3 + 1*conf_sin4
+    # RI_z =~ 1*conf_index1 + 1*conf_index2 + 1*conf_index3 + 1*conf_index4
+    # RI_w =~ 1*ideol1 + 1*ideol2 + 1*ideol3 + 1*ideol4
+    # RI_v =~ 1*ingresos1 + 1*ingresos2 + 1*ingresos3 + 1*ingresos4
+    # RI_t =~ 1*educ1 + 1*educ2 + 1*educ3 + 1*educ4
 
     
     # Create the components within
@@ -236,68 +236,68 @@ varcov <- '
     EDUC4 ~~ EDUC4
     
     # Estimate the variance and covariance between RIs.
-    RI_x ~~ RI_x
-    RI_y ~~ RI_y
-    RI_x ~~ RI_y
-    
-    RI_z ~~ RI_z
-    RI_z ~~ RI_y
-    RI_z ~~ RI_x
-    
-    RI_w ~~ RI_w
-    RI_w ~~ RI_y
-    RI_w ~~ RI_x
-    
-    RI_v ~~ RI_v
-    RI_v ~~ RI_y
-    RI_v ~~ RI_x
-
-    RI_t ~~ RI_t
-    RI_t ~~ RI_y
-    RI_t ~~ RI_x
+    # RI_x ~~ RI_x
+    # RI_y ~~ RI_y
+    # RI_x ~~ RI_y
+    # 
+    # RI_z ~~ RI_z
+    # RI_z ~~ RI_y
+    # RI_z ~~ RI_x
+    # 
+    # RI_w ~~ RI_w
+    # RI_w ~~ RI_y
+    # RI_w ~~ RI_x
+    # 
+    # RI_v ~~ RI_v
+    # RI_v ~~ RI_y
+    # RI_v ~~ RI_x
+    # 
+    # RI_t ~~ RI_t
+    # RI_t ~~ RI_y
+    # RI_t ~~ RI_x
     
     # Set the correlation between the RI and components within t=1 to zero
-    RI_x ~~ 0*DOM_INDEX1
-    RI_x ~~ 0*CS1
-    RI_x ~~ 0*CONF_INDEX1
-    RI_x ~~ 0*IDEOL1
-    RI_x ~~ 0*INGRESOS1
-    RI_x ~~ 0*EDUC1
-    
-    RI_y ~~ 0*DOM_INDEX1
-    RI_y ~~ 0*CS1
-    RI_y ~~ 0*CONF_INDEX1
-    RI_y ~~ 0*IDEOL1
-    RI_y ~~ 0*INGRESOS1
-    RI_y ~~ 0*EDUC1
-    
-    RI_z ~~ 0*DOM_INDEX1
-    RI_z ~~ 0*CS1
-    RI_z ~~ 0*CONF_INDEX1
-    RI_z ~~ 0*IDEOL1
-    RI_z ~~ 0*INGRESOS1
-    RI_z ~~ 0*EDUC1
-    
-    RI_w ~~ 0*DOM_INDEX1
-    RI_w ~~ 0*CS1
-    RI_w ~~ 0*CONF_INDEX1
-    RI_w ~~ 0*IDEOL1
-    RI_w ~~ 0*INGRESOS1
-    RI_w ~~ 0*EDUC1
-    
-    RI_v ~~ 0*DOM_INDEX1
-    RI_v ~~ 0*CS1
-    RI_v ~~ 0*CONF_INDEX1
-    RI_v ~~ 0*IDEOL1
-    RI_v ~~ 0*INGRESOS1
-    RI_v ~~ 0*EDUC1
-    
-    RI_t ~~ 0*DOM_INDEX1
-    RI_t ~~ 0*CS1
-    RI_t ~~ 0*CONF_INDEX1
-    RI_t ~~ 0*IDEOL1
-    RI_t ~~ 0*INGRESOS1
-    RI_t ~~ 0*EDUC1
+    # RI_x ~~ 0*DOM_INDEX1
+    # RI_x ~~ 0*CS1
+    # RI_x ~~ 0*CONF_INDEX1
+    # RI_x ~~ 0*IDEOL1
+    # RI_x ~~ 0*INGRESOS1
+    # RI_x ~~ 0*EDUC1
+    # 
+    # RI_y ~~ 0*DOM_INDEX1
+    # RI_y ~~ 0*CS1
+    # RI_y ~~ 0*CONF_INDEX1
+    # RI_y ~~ 0*IDEOL1
+    # RI_y ~~ 0*INGRESOS1
+    # RI_y ~~ 0*EDUC1
+    # 
+    # RI_z ~~ 0*DOM_INDEX1
+    # RI_z ~~ 0*CS1
+    # RI_z ~~ 0*CONF_INDEX1
+    # RI_z ~~ 0*IDEOL1
+    # RI_z ~~ 0*INGRESOS1
+    # RI_z ~~ 0*EDUC1
+    # 
+    # RI_w ~~ 0*DOM_INDEX1
+    # RI_w ~~ 0*CS1
+    # RI_w ~~ 0*CONF_INDEX1
+    # RI_w ~~ 0*IDEOL1
+    # RI_w ~~ 0*INGRESOS1
+    # RI_w ~~ 0*EDUC1
+    # 
+    # RI_v ~~ 0*DOM_INDEX1
+    # RI_v ~~ 0*CS1
+    # RI_v ~~ 0*CONF_INDEX1
+    # RI_v ~~ 0*IDEOL1
+    # RI_v ~~ 0*INGRESOS1
+    # RI_v ~~ 0*EDUC1
+    # 
+    # RI_t ~~ 0*DOM_INDEX1
+    # RI_t ~~ 0*CS1
+    # RI_t ~~ 0*CONF_INDEX1
+    # RI_t ~~ 0*IDEOL1
+    # RI_t ~~ 0*INGRESOS1
+    # RI_t ~~ 0*EDUC1
           '
 
 
@@ -595,7 +595,7 @@ kable(param_b1[op=="~" & rhs %in% param_b1$rhs[c(57:80)] & lhs %in% param_b1$lhs
       caption = "B1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
   row_spec(c(2), bold = T, color = "white", background = "#E37383") %>% 
-  row_spec(c(10,18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the forward unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 3 and 4 **in mens**. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_b1$est[param_b1$lhs == "DOM_INDEX4" & param_b1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions, political ideology, income brackets, education and age. 
@@ -615,7 +615,7 @@ kable(param_b2[op=="~" & rhs %in% param_b2$rhs[c(57:80)] & lhs %in% param_b2$lhs
       digits = 3,
       caption = "B2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(c(2,10,18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(2,10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the forward constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of `r round(param_b2$est[param_b2$lhs == "DOM_INDEX4" & param_b2$rhs == "CS3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in all the other variables.

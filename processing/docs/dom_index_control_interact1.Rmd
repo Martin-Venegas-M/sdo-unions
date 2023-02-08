@@ -91,6 +91,12 @@ sjPlot::set_theme(
 # Load data
 
 elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
+
+elsoc$ideol1 <- car::recode(elsoc$ideol1," 
+                            c(0,1,2,3,4) = 1;
+                            c(5) = 2;
+                            c(6,7,8,9,10) = 3
+                            ", as.factor = T)
 ```
 
 
@@ -110,7 +116,6 @@ bwcomp <- '
     RI_x =~ 1*dom_index1 + 1*dom_index2 + 1*dom_index3 + 1*dom_index4
     RI_y =~ 1*conf_sin1 + 1*conf_sin2 + 1*conf_sin3 + 1*conf_sin4
     RI_z =~ 1*conf_index1 + 1*conf_index2 + 1*conf_index3 + 1*conf_index4
-    RI_w =~ 1*ideol1 + 1*ideol2 + 1*ideol3 + 1*ideol4
     RI_v =~ 1*ingresos1 + 1*ingresos2 + 1*ingresos3 + 1*ingresos4
     RI_t =~ 1*educ1 + 1*educ2 + 1*educ3 + 1*educ4
 
@@ -131,11 +136,6 @@ bwcomp <- '
     CONF_INDEX2 =~ 1*conf_index2
     CONF_INDEX3 =~ 1*conf_index3
     CONF_INDEX4 =~ 1*conf_index4
-  
-    IDEOL1 =~ 1*ideol1
-    IDEOL2 =~ 1*ideol2
-    IDEOL3 =~ 1*ideol3
-    IDEOL4 =~ 1*ideol4
     
     INGRESOS1 =~ 1*ingresos1
     INGRESOS2 =~ 1*ingresos2
@@ -165,8 +165,6 @@ varcov <- '
     DOM_INDEX1 ~~ CS1
     CONF_INDEX1 ~~ CS1 
     DOM_INDEX1 ~~ CONF_INDEX1
-    IDEOL1 ~~ CS1 
-    DOM_INDEX1 ~~ IDEOL1
     INGRESOS1 ~~ CS1 
     DOM_INDEX1 ~~ INGRESOS1
     EDUC1 ~~ CS1 
@@ -176,8 +174,6 @@ varcov <- '
     DOM_INDEX2 ~~ CS2
     CONF_INDEX2 ~~ CS2 
     DOM_INDEX2 ~~ CONF_INDEX2
-    IDEOL2 ~~ CS2 
-    DOM_INDEX2 ~~ IDEOL2
     INGRESOS2 ~~ CS2 
     DOM_INDEX2 ~~ INGRESOS2
     EDUC2 ~~ CS2 
@@ -186,8 +182,6 @@ varcov <- '
     DOM_INDEX3 ~~ CS3
     CONF_INDEX3 ~~ CS3 
     DOM_INDEX3 ~~ CONF_INDEX3
-    IDEOL3 ~~ CS3 
-    DOM_INDEX3 ~~ IDEOL3
     INGRESOS3 ~~ CS3 
     DOM_INDEX3 ~~ INGRESOS3
     EDUC3 ~~ CS3 
@@ -196,8 +190,6 @@ varcov <- '
     DOM_INDEX4 ~~ CS4
     CONF_INDEX4 ~~ CS4 
     DOM_INDEX4 ~~ CONF_INDEX4
-    IDEOL4 ~~ CS4 
-    DOM_INDEX4 ~~ IDEOL4
     INGRESOS4 ~~ CS4 
     DOM_INDEX4 ~~ INGRESOS4
     EDUC4 ~~ CS4 
@@ -220,11 +212,6 @@ varcov <- '
     CONF_INDEX3 ~~ CONF_INDEX3
     CONF_INDEX4 ~~ CONF_INDEX4
     
-    IDEOL1 ~~ IDEOL1 # Variances
-    IDEOL2 ~~ IDEOL2
-    IDEOL3 ~~ IDEOL3
-    IDEOL4 ~~ IDEOL4
-    
     INGRESOS1 ~~ INGRESOS1 # Variances
     INGRESOS2 ~~ INGRESOS2
     INGRESOS3 ~~ INGRESOS3
@@ -244,10 +231,6 @@ varcov <- '
     RI_z ~~ RI_y
     RI_z ~~ RI_x
     
-    RI_w ~~ RI_w
-    RI_w ~~ RI_y
-    RI_w ~~ RI_x
-    
     RI_v ~~ RI_v
     RI_v ~~ RI_y
     RI_v ~~ RI_x
@@ -260,42 +243,30 @@ varcov <- '
     RI_x ~~ 0*DOM_INDEX1
     RI_x ~~ 0*CS1
     RI_x ~~ 0*CONF_INDEX1
-    RI_x ~~ 0*IDEOL1
     RI_x ~~ 0*INGRESOS1
     RI_x ~~ 0*EDUC1
     
     RI_y ~~ 0*DOM_INDEX1
     RI_y ~~ 0*CS1
     RI_y ~~ 0*CONF_INDEX1
-    RI_y ~~ 0*IDEOL1
     RI_y ~~ 0*INGRESOS1
     RI_y ~~ 0*EDUC1
     
     RI_z ~~ 0*DOM_INDEX1
     RI_z ~~ 0*CS1
     RI_z ~~ 0*CONF_INDEX1
-    RI_z ~~ 0*IDEOL1
     RI_z ~~ 0*INGRESOS1
     RI_z ~~ 0*EDUC1
-    
-    RI_w ~~ 0*DOM_INDEX1
-    RI_w ~~ 0*CS1
-    RI_w ~~ 0*CONF_INDEX1
-    RI_w ~~ 0*IDEOL1
-    RI_w ~~ 0*INGRESOS1
-    RI_w ~~ 0*EDUC1
     
     RI_v ~~ 0*DOM_INDEX1
     RI_v ~~ 0*CS1
     RI_v ~~ 0*CONF_INDEX1
-    RI_v ~~ 0*IDEOL1
     RI_v ~~ 0*INGRESOS1
     RI_v ~~ 0*EDUC1
     
     RI_t ~~ 0*DOM_INDEX1
     RI_t ~~ 0*CS1
     RI_t ~~ 0*CONF_INDEX1
-    RI_t ~~ 0*IDEOL1
     RI_t ~~ 0*INGRESOS1
     RI_t ~~ 0*EDUC1
           '
@@ -314,9 +285,6 @@ a1 <- '
     CONF_INDEX4 ~ CONF_INDEX3
     CONF_INDEX3 ~ CONF_INDEX2
     CONF_INDEX2 ~ CONF_INDEX1
-    IDEOL4 ~ IDEOL3
-    IDEOL3 ~ IDEOL2
-    IDEOL2 ~ IDEOL1
     INGRESOS4 ~ INGRESOS3
     INGRESOS3 ~ INGRESOS2
     INGRESOS2 ~ INGRESOS1
@@ -327,40 +295,34 @@ a1 <- '
 
 ### Autoregressive: constrained
 a2 <- '
-    DOM_INDEX2 ~ a*DOM_INDEX1      
-    DOM_INDEX3 ~ a*DOM_INDEX2 
-    DOM_INDEX4 ~ a*DOM_INDEX3 
-    CS2 ~ i*CS1
-    CS3 ~ i*CS2
-    CS4 ~ i*CS3
-    CONF_INDEX4 ~ o*CONF_INDEX3
-    CONF_INDEX3 ~ o*CONF_INDEX2
-    CONF_INDEX2 ~ o*CONF_INDEX1
-    IDEOL4 ~ p*IDEOL3
-    IDEOL3 ~ p*IDEOL2
-    IDEOL2 ~ p*IDEOL1
-    INGRESOS4 ~ q*INGRESOS3
-    INGRESOS3 ~ q*INGRESOS2
-    INGRESOS2 ~ q*INGRESOS1
-    EDUC4 ~ r*EDUC3
-    EDUC3 ~ r*EDUC2
-    EDUC2 ~ r*EDUC1
+    DOM_INDEX2 ~ c(a,a,a)*DOM_INDEX1      
+    DOM_INDEX3 ~ c(a,a,a)*DOM_INDEX2 
+    DOM_INDEX4 ~ c(a,a,a)*DOM_INDEX3 
+    CS2 ~ c(i,i,i)*CS1
+    CS3 ~ c(i,i,i)*CS2
+    CS4 ~ c(i,i,i)*CS3
+    CONF_INDEX4 ~ c(o,o,o)*CONF_INDEX3
+    CONF_INDEX3 ~ c(o,o,o)*CONF_INDEX2
+    CONF_INDEX2 ~ c(o,o,o)*CONF_INDEX1
+    INGRESOS4 ~ c(q,q,q)*INGRESOS3
+    INGRESOS3 ~ c(q,q,q)*INGRESOS2
+    INGRESOS2 ~ c(q,q,q)*INGRESOS1
+    EDUC4 ~ c(r,r,r)*EDUC3
+    EDUC3 ~ c(r,r,r)*EDUC2
+    EDUC2 ~ c(r,r,r)*EDUC1
 '
 
 ### Forward: free
 b1 <- '
-    DOM_INDEX2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + IDEOL1 + INGRESOS1 + EDUC1 + g*edad1 + x*sexo1         
-    DOM_INDEX3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + IDEOL2 + INGRESOS2 + EDUC2 + g*edad1 + x*sexo1  
-    DOM_INDEX4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + IDEOL3 + INGRESOS3 + EDUC3 + g*edad1 + x*sexo1 
+    DOM_INDEX2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + INGRESOS1 + EDUC1 + g*edad1 + x*sexo1         
+    DOM_INDEX3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + INGRESOS2 + EDUC2 + g*edad1 + x*sexo1  
+    DOM_INDEX4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + INGRESOS3 + EDUC3 + g*edad1 + x*sexo1 
     CS2 ~ CS1
     CS3 ~ CS2
     CS4 ~ CS3
     CONF_INDEX4 ~ CONF_INDEX3
     CONF_INDEX3 ~ CONF_INDEX2
     CONF_INDEX2 ~ CONF_INDEX1
-    IDEOL4 ~ IDEOL3
-    IDEOL3 ~ IDEOL2
-    IDEOL2 ~ IDEOL1
     INGRESOS4 ~ INGRESOS3
     INGRESOS3 ~ INGRESOS2
     INGRESOS2 ~ INGRESOS1
@@ -371,24 +333,21 @@ b1 <- '
 
 ### Forward: constrained
 b2 <- '
-    DOM_INDEX2 ~ a*DOM_INDEX1 + b*CS1 + c*CONF_INDEX1 + d*IDEOL1 + e*INGRESOS1 + f*EDUC1 + g*edad1 + x*sexo1     
-    DOM_INDEX3 ~ a*DOM_INDEX2 + b*CS2 + c*CONF_INDEX2 + d*IDEOL2 + e*INGRESOS2 + f*EDUC2 + g*edad1 + x*sexo1
-    DOM_INDEX4 ~ a*DOM_INDEX3 + b*CS3 + c*CONF_INDEX3 + d*IDEOL3 + e*INGRESOS3 + f*EDUC3 + g*edad1 + x*sexo1
-    CS2 ~ i*CS1
-    CS3 ~ i*CS2
-    CS4 ~ i*CS3
-    CONF_INDEX4 ~ o*CONF_INDEX3
-    CONF_INDEX3 ~ o*CONF_INDEX2
-    CONF_INDEX2 ~ o*CONF_INDEX1
-    IDEOL4 ~ p*IDEOL3
-    IDEOL3 ~ p*IDEOL2
-    IDEOL2 ~ p*IDEOL1
-    INGRESOS4 ~ q*INGRESOS3
-    INGRESOS3 ~ q*INGRESOS2
-    INGRESOS2 ~ q*INGRESOS1
-    EDUC4 ~ r*EDUC3
-    EDUC3 ~ r*EDUC2
-    EDUC2 ~ r*EDUC1
+    DOM_INDEX2 ~ c(a,a,a)*DOM_INDEX1 + c(b,b,b)*CS1 + c(c,c,c)*CONF_INDEX1  + c(e,e,e)*INGRESOS1 + c(f,f,f)*EDUC1 + g*edad1 + x*sexo1     
+    DOM_INDEX3 ~ c(a,a,a)*DOM_INDEX2 + c(b,b,b)*CS2 + c(c,c,c)*CONF_INDEX2  + c(e,e,e)*INGRESOS2 + c(f,f,f)*EDUC2 + g*edad1 + x*sexo1
+    DOM_INDEX4 ~ c(a,a,a)*DOM_INDEX3 + c(b,b,b)*CS3 + c(c,c,c)*CONF_INDEX3  + c(e,e,e)*INGRESOS3 + c(f,f,f)*EDUC3 + g*edad1 + x*sexo1
+    CS2 ~ c(i,i,i)*CS1
+    CS3 ~ c(i,i,i)*CS2
+    CS4 ~ c(i,i,i)*CS3
+    CONF_INDEX4 ~ c(o,o,o)*CONF_INDEX3
+    CONF_INDEX3 ~ c(o,o,o)*CONF_INDEX2
+    CONF_INDEX2 ~ c(o,o,o)*CONF_INDEX1
+    INGRESOS4 ~ c(q,q,q)*INGRESOS3
+    INGRESOS3 ~ c(q,q,q)*INGRESOS2
+    INGRESOS2 ~ c(q,q,q)*INGRESOS1
+    EDUC4 ~ c(r,r,r)*EDUC3
+    EDUC3 ~ c(r,r,r)*EDUC2
+    EDUC2 ~ c(r,r,r)*EDUC1
 '
 
 ### Backward: free
@@ -396,15 +355,12 @@ c1 <- '
     DOM_INDEX2 ~ DOM_INDEX1       
     DOM_INDEX3 ~ DOM_INDEX2 
     DOM_INDEX4 ~ DOM_INDEX3 
-    CS2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + IDEOL1 + INGRESOS1 + EDUC1 + n*edad1 + z*sexo1 
-    CS3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + IDEOL2 + INGRESOS2 + EDUC2 + n*edad1 + z*sexo1
-    CS4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + IDEOL3 + INGRESOS3 + EDUC3 + n*edad1 + z*sexo1
+    CS2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + INGRESOS1 + EDUC1 + n*edad1 + z*sexo1 
+    CS3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + INGRESOS2 + EDUC2 + n*edad1 + z*sexo1
+    CS4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + INGRESOS3 + EDUC3 + n*edad1 + z*sexo1
     CONF_INDEX4 ~ CONF_INDEX3
     CONF_INDEX3 ~ CONF_INDEX2
     CONF_INDEX2 ~ CONF_INDEX1
-    IDEOL4 ~ IDEOL3
-    IDEOL3 ~ IDEOL2
-    IDEOL2 ~ IDEOL1
     INGRESOS4 ~ INGRESOS3
     INGRESOS3 ~ INGRESOS2
     INGRESOS2 ~ INGRESOS1
@@ -415,40 +371,35 @@ c1 <- '
 
 ### Backward: constrained
 c2 <- '
-    DOM_INDEX2 ~ a*DOM_INDEX1        
-    DOM_INDEX3 ~ a*DOM_INDEX2  
-    DOM_INDEX4 ~ a*DOM_INDEX3
-    CS2 ~ h*DOM_INDEX1 + i*CS1 + j*CONF_INDEX1 + k*IDEOL1 + l*INGRESOS1 + m*EDUC1 + n*edad1 + z*sexo1 
-    CS3 ~ h*DOM_INDEX2 + i*CS2 + j*CONF_INDEX2 + k*IDEOL2 + l*INGRESOS2 + m*EDUC2 + n*edad1 + z*sexo1
-    CS4 ~ h*DOM_INDEX3 + i*CS3 + j*CONF_INDEX3 + k*IDEOL3 + l*INGRESOS3 + m*EDUC3 + n*edad1 + z*sexo1
-    CONF_INDEX4 ~ o*CONF_INDEX3
-    CONF_INDEX3 ~ o*CONF_INDEX2
-    CONF_INDEX2 ~ o*CONF_INDEX1
-    IDEOL4 ~ p*IDEOL3
-    IDEOL3 ~ p*IDEOL2
-    IDEOL2 ~ p*IDEOL1
-    INGRESOS4 ~ q*INGRESOS3
-    INGRESOS3 ~ q*INGRESOS2
-    INGRESOS2 ~ q*INGRESOS1
-    EDUC4 ~ r*EDUC3
-    EDUC3 ~ r*EDUC2
-    EDUC2 ~ r*EDUC1
+    DOM_INDEX2 ~ c(a,a,a)*DOM_INDEX1        
+    DOM_INDEX3 ~ c(a,a,a)*DOM_INDEX2  
+    DOM_INDEX4 ~ c(a,a,a)*DOM_INDEX3
+    CS2 ~ c(h,h,h)*DOM_INDEX1 + c(i,i,i)*CS1 + c(j,j,j)*CONF_INDEX1 + c(l,l,l)*INGRESOS1 + c(m,m,m)*EDUC1 + n*edad1 + z*sexo1 
+    CS3 ~ c(h,h,h)*DOM_INDEX2 + c(i,i,i)*CS2 + c(j,j,j)*CONF_INDEX2 + c(l,l,l)*INGRESOS2 + c(m,m,m)*EDUC2 + n*edad1 + z*sexo1
+    CS4 ~ c(h,h,h)*DOM_INDEX3 + c(i,i,i)*CS3 + c(j,j,j)*CONF_INDEX3 + c(l,l,l)*INGRESOS3 + c(m,m,m)*EDUC3 + n*edad1 + z*sexo1
+    CONF_INDEX4 ~ c(o,o,o)*CONF_INDEX3
+    CONF_INDEX3 ~ c(o,o,o)*CONF_INDEX2
+    CONF_INDEX2 ~ c(o,o,o)*CONF_INDEX1
+
+    INGRESOS4 ~ c(q,q,q)*INGRESOS3
+    INGRESOS3 ~ c(q,q,q)*INGRESOS2
+    INGRESOS2 ~ c(q,q,q)*INGRESOS1
+    EDUC4 ~ c(r,r,r)*EDUC3
+    EDUC3 ~ c(r,r,r)*EDUC2
+    EDUC2 ~ c(r,r,r)*EDUC1
 '
 
 ### Bidrectional: free
 d1 <- '
-    DOM_INDEX2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + IDEOL1 + INGRESOS1 + EDUC1 + g*edad1 + x*sexo1         
-    DOM_INDEX3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + IDEOL2 + INGRESOS2 + EDUC2 + g*edad1 + x*sexo1  
-    DOM_INDEX4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + IDEOL3 + INGRESOS3 + EDUC3 + g*edad1 + x*sexo1 
-    CS2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + IDEOL1 + INGRESOS1 + EDUC1 + n*edad1 + z*sexo1 
-    CS3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + IDEOL2 + INGRESOS2 + EDUC2 + n*edad1 + z*sexo1
-    CS4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + IDEOL3 + INGRESOS3 + EDUC3 + n*edad1 + z*sexo1
+    DOM_INDEX2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + INGRESOS1 + EDUC1 + g*edad1 + x*sexo1         
+    DOM_INDEX3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + INGRESOS2 + EDUC2 + g*edad1 + x*sexo1  
+    DOM_INDEX4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + INGRESOS3 + EDUC3 + g*edad1 + x*sexo1 
+    CS2 ~ DOM_INDEX1 + CS1 + CONF_INDEX1 + INGRESOS1 + EDUC1 + n*edad1 + z*sexo1 
+    CS3 ~ DOM_INDEX2 + CS2 + CONF_INDEX2 + INGRESOS2 + EDUC2 + n*edad1 + z*sexo1
+    CS4 ~ DOM_INDEX3 + CS3 + CONF_INDEX3 + INGRESOS3 + EDUC3 + n*edad1 + z*sexo1
     CONF_INDEX4 ~ CONF_INDEX3
     CONF_INDEX3 ~ CONF_INDEX2
     CONF_INDEX2 ~ CONF_INDEX1
-    IDEOL4 ~ IDEOL3
-    IDEOL3 ~ IDEOL2
-    IDEOL2 ~ IDEOL1
     INGRESOS4 ~ INGRESOS3
     INGRESOS3 ~ INGRESOS2
     INGRESOS2 ~ INGRESOS1
@@ -459,24 +410,21 @@ d1 <- '
 
 ### Bidrectional: Constrained
 d2 <- '
-    DOM_INDEX2 ~ a*DOM_INDEX1 + b*CS1 + c*CONF_INDEX1 + d*IDEOL1 + e*INGRESOS1 + f*EDUC1 + g*edad1 + x*sexo1    
-    DOM_INDEX3 ~ a*DOM_INDEX2 + b*CS2 + c*CONF_INDEX2 + d*IDEOL2 + e*INGRESOS2 + f*EDUC2 + g*edad1 + x*sexo1
-    DOM_INDEX4 ~ a*DOM_INDEX3 + b*CS3 + c*CONF_INDEX3 + d*IDEOL3 + e*INGRESOS3 + f*EDUC3 + g*edad1 + x*sexo1
-    CS2 ~ h*DOM_INDEX1 + i*CS1 + j*CONF_INDEX1 + k*IDEOL1 + l*INGRESOS1 + m*EDUC1 + n*edad1 + z*sexo1 
-    CS3 ~ h*DOM_INDEX2 + i*CS2 + j*CONF_INDEX2 + k*IDEOL2 + l*INGRESOS2 + m*EDUC2 + n*edad1 + z*sexo1
-    CS4 ~ h*DOM_INDEX3 + i*CS3 + j*CONF_INDEX3 + k*IDEOL3 + l*INGRESOS3 + m*EDUC3 + n*edad1 + z*sexo1
-    CONF_INDEX4 ~ o*CONF_INDEX3
-    CONF_INDEX3 ~ o*CONF_INDEX2
-    CONF_INDEX2 ~ o*CONF_INDEX1
-    IDEOL4 ~ p*IDEOL3
-    IDEOL3 ~ p*IDEOL2
-    IDEOL2 ~ p*IDEOL1
-    INGRESOS4 ~ q*INGRESOS3
-    INGRESOS3 ~ q*INGRESOS2
-    INGRESOS2 ~ q*INGRESOS1
-    EDUC4 ~ r*EDUC3
-    EDUC3 ~ r*EDUC2
-    EDUC2 ~ r*EDUC1
+    DOM_INDEX2 ~ c(a,a,a)*DOM_INDEX1 + c(b,b,b)*CS1 + c(c,c,c)*CONF_INDEX1 + c(e,e,e)*INGRESOS1 + c(f,f,f)*EDUC1 + g*edad1 + x*sexo1    
+    DOM_INDEX3 ~ c(a,a,a)*DOM_INDEX2 + c(b,b,b)*CS2 + c(c,c,c)*CONF_INDEX2 + c(e,e,e)*INGRESOS2 + c(f,f,f)*EDUC2 + g*edad1 + x*sexo1
+    DOM_INDEX4 ~ c(a,a,a)*DOM_INDEX3 + c(b,b,b)*CS3 + c(c,c,c)*CONF_INDEX3 + c(e,e,e)*INGRESOS3 + c(f,f,f)*EDUC3 + g*edad1 + x*sexo1
+    CS2 ~ c(h,h,h)*DOM_INDEX1 + c(i,i,i)*CS1 + c(j,j,j)*CONF_INDEX1  + c(l,l,l)*INGRESOS1 + c(m,m,m)*EDUC1 + n*edad1 + z*sexo1 
+    CS3 ~ c(h,h,h)*DOM_INDEX2 + c(i,i,i)*CS2 + c(j,j,j)*CONF_INDEX2  + c(l,l,l)*INGRESOS2 + c(m,m,m)*EDUC2 + n*edad1 + z*sexo1
+    CS4 ~ c(h,h,h)*DOM_INDEX3 + c(i,i,i)*CS3 + c(j,j,j)*CONF_INDEX3  + c(l,l,l)*INGRESOS3 + c(m,m,m)*EDUC3 + n*edad1 + z*sexo1
+    CONF_INDEX4 ~ c(o,o,o)*CONF_INDEX3
+    CONF_INDEX3 ~ c(o,o,o)*CONF_INDEX2
+    CONF_INDEX2 ~ c(o,o,o)*CONF_INDEX1
+    INGRESOS4 ~ c(q,q,q)*INGRESOS3
+    INGRESOS3 ~ c(q,q,q)*INGRESOS2
+    INGRESOS2 ~ c(q,q,q)*INGRESOS1
+    EDUC4 ~ c(r,r,r)*EDUC3
+    EDUC3 ~ c(r,r,r)*EDUC2
+    EDUC2 ~ c(r,r,r)*EDUC1
 '
 
 # 7.2 Create GOF ----------------
@@ -493,6 +441,7 @@ for (i in models){
                      data = elsoc, 
                      estimator = "MLR", 
                      missing = "FIML",
+                     group = "ideol1",
                      meanstructure = T, 
                      int.ov.free = T) # Execute estimate
 }
@@ -580,6 +529,11 @@ At the Table \@ref(tab:fit-comp2)
 ```{r bw1}
 param_b1 <- data.table(parameterEstimates(fit[["b1"]]))
 
+param_b1$group <- car::Recode(param_b1$group,"
+                              1 = 'Izquierda';
+                              2 = 'Centro';
+                              3 = 'Derecha'")
+
 kable(param_b1[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
       caption = "B1 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
@@ -590,18 +544,23 @@ At the Table \@ref(tab:bw1), estimates for the random intercepts of forward unco
 
 ```{r w1}
 
-kable(param_b1[op=="~" & rhs %in% param_b1$rhs[c(57:80)] & lhs %in% param_b1$lhs[c(57:80)] , !"label"],
+kable(param_b1[op=="~" & rhs %in% param_b1$rhs[c(49:72)] & lhs %in% param_b1$lhs[c(49:72)] , !"label"],
       digits = 3,
       caption = "B1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
   row_spec(c(2), bold = T, color = "white", background = "#E37383") %>% 
-  row_spec(c(10,18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(9,16), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the forward unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 3 and 4 **in mens**. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_b1$est[param_b1$lhs == "DOM_INDEX4" & param_b1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions, political ideology, income brackets, education and age. 
 
 ```{r bw2}
 param_b2 <- data.table(parameterEstimates(fit[["b2"]]))
+
+param_b2$group <- car::Recode(param_b2$group,"
+                              1 = 'Izquierda';
+                              2 = 'Centro';
+                              3 = 'Derecha'")
 
 kable(param_b2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
             caption = "B2 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
@@ -611,11 +570,11 @@ At the Table \@ref(tab:bw2) estimates for the random intercepts of forward const
 
 ```{r w2}
 
-kable(param_b2[op=="~" & rhs %in% param_b2$rhs[c(57:80)] & lhs %in% param_b2$lhs[c(57:80)] , !"label"],
+kable(param_b2[op=="~" & rhs %in% param_b2$rhs[c(49:72)] & lhs %in% param_b2$lhs[c(49:72)] , !"label"],
       digits = 3,
       caption = "B2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(c(2,10,18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(2,9,16,26,33,40,50,57,64), bold = T, color = "white", background = "#9CE599") 
 ```
 
 At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the forward constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of `r round(param_b2$est[param_b2$lhs == "DOM_INDEX4" & param_b2$rhs == "CS3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in all the other variables.
@@ -625,6 +584,11 @@ At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed f
 ```{r bw3}
 param_d1 <- data.table(parameterEstimates(fit[["d1"]]))
 
+param_d1$group <- car::Recode(param_d1$group,"
+                              1 = 'Izquierda';
+                              2 = 'Centro';
+                              3 = 'Derecha'")
+
 kable(param_d1[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
       caption = "D1 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
@@ -633,18 +597,23 @@ At the Table \@ref(tab:bw3), estimates for the random intercepts of bidirectiona
 
 ```{r w3}
 
-kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(57:104)] & lhs %in% param_d1$lhs[c(57:104)] , !"label"],
+kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(49:90)] & lhs %in% param_d1$lhs[c(49:90)] , !"label"],
       digits = 3,
       caption = "D1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-   row_spec(c(2, 10, 25, 33, 41), bold = T, color = "white", background = "#E37383") %>% 
-  row_spec(c(18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+   row_spec(c(2, 22, 29, 37), bold = T, color = "white", background = "#E37383") %>% 
+  row_spec(c(9,16), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w3) estimates of the crosslagged regressions are showed for the bidirectional unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 3 and 4 **in mens**. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions, political ideology, income ingresoss, education and age. 
 
 ```{r bw4}
 param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
+
+param_d2$group <- car::Recode(param_d2$group,"
+                              1 = 'Izquierda';
+                              2 = 'Centro';
+                              3 = 'Derecha'")
 
 kable(param_d2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
             caption = "D2 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
@@ -654,7 +623,7 @@ At the Table \@ref(tab:bw4) estimates for the random intercepts of bidirectional
 
 ```{r w4}
 
-kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(57:104)] & lhs %in% param_d2$lhs[c(57:104)] , !"label"],
+kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(49:90)] & lhs %in% param_d2$lhs[c(49:90)] , !"label"],
       digits = 3,
       caption = "D2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
