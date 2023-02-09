@@ -590,12 +590,12 @@ At the Table \@ref(tab:bw1), estimates for the random intercepts of forward unco
 
 ```{r w1}
 
-kable(param_b1[op=="~" & rhs %in% param_b1$rhs[c(57:80)] & lhs %in% param_b1$lhs[c(57:80)] , !"label"],
+kable(param_b1[op=="~" & rhs %in% param_b1$rhs[c(33:71)] & lhs %in% param_b1$lhs[c(33:71)] , !"label"],
       digits = 3,
       caption = "B1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
   row_spec(c(2), bold = T, color = "white", background = "#E37383") %>% 
-  row_spec(c(10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(10, 18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the forward unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 3 and 4 **in mens**. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_b1$est[param_b1$lhs == "DOM_INDEX4" & param_b1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions, political ideology, income brackets, education and age. 
@@ -611,11 +611,11 @@ At the Table \@ref(tab:bw2) estimates for the random intercepts of forward const
 
 ```{r w2}
 
-kable(param_b2[op=="~" & rhs %in% param_b2$rhs[c(57:80)] & lhs %in% param_b2$lhs[c(57:80)] , !"label"],
+kable(param_b2[op=="~" & rhs %in% param_b2$rhs[c(33:71)] & lhs %in% param_b2$lhs[c(33:71)] , !"label"],
       digits = 3,
       caption = "B2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(c(2,10), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+  row_spec(c(2,10, 18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the forward constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a negative deviation of `r round(param_b2$est[param_b2$lhs == "DOM_INDEX4" & param_b2$rhs == "CS3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in all the other variables.
@@ -633,12 +633,12 @@ At the Table \@ref(tab:bw3), estimates for the random intercepts of bidirectiona
 
 ```{r w3}
 
-kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(57:104)] & lhs %in% param_d1$lhs[c(57:104)] , !"label"],
+kable(param_d1[op=="~" & rhs %in% param_d1$rhs[c(33:80)] & lhs %in% param_d1$lhs[c(33:80)] , !"label"],
       digits = 3,
       caption = "D1 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-   row_spec(c(2, 10, 25, 33, 41), bold = T, color = "white", background = "#E37383") %>% 
-  row_spec(c(18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+   row_spec(c(2, 25, 33, 41), bold = T, color = "white", background = "#E37383") %>% 
+  row_spec(c(10, 18), bold = T, color = "white", background = "#9CE599") # Añadir destacado
 ```
 
 At the Table \@ref(tab:w3) estimates of the crosslagged regressions are showed for the bidirectional unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 3 and 4 **in mens**. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_d1$est[param_d1$lhs == "DOM_INDEX4" & param_d1$rhs == "CS3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO and trust in institutions, political ideology, income ingresoss, education and age. 
@@ -654,7 +654,7 @@ At the Table \@ref(tab:bw4) estimates for the random intercepts of bidirectional
 
 ```{r w4}
 
-kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(57:104)] & lhs %in% param_d2$lhs[c(57:104)] , !"label"],
+kable(param_d2[op=="~" & rhs %in% param_d2$rhs[c(33:80)] & lhs %in% param_d2$lhs[c(33:80)] , !"label"],
       digits = 3,
       caption = "D2 model interpretations of within components") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
