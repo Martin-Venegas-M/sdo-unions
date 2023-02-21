@@ -157,6 +157,26 @@ bwcomp <- '
     conf_sin2 ~~ 0*conf_sin2
     conf_sin3 ~~ 0*conf_sin3
     conf_sin4 ~~ 0*conf_sin4
+    
+    conf_index1 ~~ 0*conf_index1
+    conf_index2 ~~ 0*conf_index2
+    conf_index3 ~~ 0*conf_index3
+    conf_index4 ~~ 0*conf_index4
+  
+    ideol1 ~~ 0*ideol1
+    ideol2 ~~ 0*ideol2
+    ideol3 ~~ 0*ideol3
+    ideol4 ~~ 0*ideol4
+    
+    ingresos1 ~~ 0*ingresos1
+    ingresos2 ~~ 0*ingresos2
+    ingresos3 ~~ 0*ingresos3
+    ingresos4 ~~ 0*ingresos4
+    
+    educ1 ~~ 0*educ1
+    educ2 ~~ 0*educ2
+    educ3 ~~ 0*educ3
+    educ4 ~~ 0*educ4
           '
 
 ## Estimate variance within
@@ -172,6 +192,21 @@ varcov <- '
     EDUC1 ~~ CS1 
     DOM_INDEX1 ~~ EDUC1
     
+    edad1 ~~ DOM_INDEX1
+    edad1 ~~ CS1
+    edad1 ~~ CONF_INDEX1
+    edad1 ~~ IDEOL1
+    edad1 ~~ INGRESOS1
+    edad1 ~~ EDUC1
+    
+    sexo1 ~~ DOM_INDEX1
+    sexo1 ~~ CS1
+    sexo1 ~~ CONF_INDEX1
+    sexo1 ~~ IDEOL1
+    sexo1 ~~ INGRESOS1
+    sexo1 ~~ EDUC1
+    
+    
     # Estimate the covariances between the residuals of the within component.
     DOM_INDEX2 ~~ CS2
     CONF_INDEX2 ~~ CS2 
@@ -182,6 +217,7 @@ varcov <- '
     DOM_INDEX2 ~~ INGRESOS2
     EDUC2 ~~ CS2 
     DOM_INDEX2 ~~ EDUC2
+    
     
     DOM_INDEX3 ~~ CS3
     CONF_INDEX3 ~~ CS3 
@@ -234,6 +270,9 @@ varcov <- '
     EDUC2 ~~ EDUC2
     EDUC3 ~~ EDUC3
     EDUC4 ~~ EDUC4
+    
+    edad1 ~~ edad1
+    sexo1 ~~ sexo1
     
     # Estimate the variance and covariance between RIs.
     # RI_x ~~ RI_x
