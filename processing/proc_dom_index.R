@@ -147,45 +147,45 @@ elsoc <- elsoc_wide_2016_2021 %>% select(idencuesta,
 ## 4.1 Trust in *Institution* ------------
 
 ## See frequencies
-frq(elsoc$conf_sin1)
-frq(elsoc$conf_sin2)
-frq(elsoc$conf_sin3)
-frq(elsoc$conf_sin4)
+#frqelsoc$conf_sin1)
+#frqelsoc$conf_sin2)
+#frqelsoc$conf_sin3)
+#frqelsoc$conf_sin4)
 
-frq(elsoc$conf_gob1)
-frq(elsoc$conf_gob2)
-frq(elsoc$conf_gob3)
-frq(elsoc$conf_gob4)
+#frqelsoc$conf_gob1)
+#frqelsoc$conf_gob2)
+#frqelsoc$conf_gob3)
+#frqelsoc$conf_gob4)
 
-frq(elsoc$conf_partidos1)
-frq(elsoc$conf_partidos2)
-frq(elsoc$conf_partidos3)
-frq(elsoc$conf_partidos4)
+#frqelsoc$conf_partidos1)
+#frqelsoc$conf_partidos2)
+#frqelsoc$conf_partidos3)
+#frqelsoc$conf_partidos4)
 
-frq(elsoc$conf_carab1)
-frq(elsoc$conf_carab2)
-frq(elsoc$conf_carab3)
-frq(elsoc$conf_carab4)
+#frqelsoc$conf_carab1)
+#frqelsoc$conf_carab2)
+#frqelsoc$conf_carab3)
+#frqelsoc$conf_carab4)
 
-frq(elsoc$conf_pjudicial1)
-frq(elsoc$conf_pjudicial2)
-frq(elsoc$conf_pjudicial3)
-frq(elsoc$conf_pjudicial4)
+#frqelsoc$conf_pjudicial1)
+#frqelsoc$conf_pjudicial2)
+#frqelsoc$conf_pjudicial3)
+#frqelsoc$conf_pjudicial4)
 
-frq(elsoc$conf_emppriv1)
-frq(elsoc$conf_emppriv2)
-frq(elsoc$conf_emppriv3)
-frq(elsoc$conf_emppriv4)
+#frqelsoc$conf_emppriv1)
+#frqelsoc$conf_emppriv2)
+#frqelsoc$conf_emppriv3)
+#frqelsoc$conf_emppriv4)
 
-frq(elsoc$conf_congreso1)
-frq(elsoc$conf_congreso2)
-frq(elsoc$conf_congreso3)
-frq(elsoc$conf_congreso4)
+#frqelsoc$conf_congreso1)
+#frqelsoc$conf_congreso2)
+#frqelsoc$conf_congreso3)
+#frqelsoc$conf_congreso4)
 
-frq(elsoc$conf_presidente1)
-frq(elsoc$conf_presidente2)
-frq(elsoc$conf_presidente3)
-frq(elsoc$conf_presidente4)
+#frqelsoc$conf_presidente1)
+#frqelsoc$conf_presidente2)
+#frqelsoc$conf_presidente3)
+#frqelsoc$conf_presidente4)
 
 
 
@@ -196,69 +196,77 @@ elsoc <- elsoc %>%
             ~ car::recode(., "c(-666,-777,-888,-999) = NA"))
 
 ## See frequencies post-rec
-frq(elsoc$conf_sin1)
-frq(elsoc$conf_sin2)
-frq(elsoc$conf_sin3)
-frq(elsoc$conf_sin4)
+#frqelsoc$conf_sin1)
+#frqelsoc$conf_sin2)
+#frqelsoc$conf_sin3)
+#frqelsoc$conf_sin4)
 
-frq(elsoc$conf_gob1)
-frq(elsoc$conf_gob2)
-frq(elsoc$conf_gob3)
-frq(elsoc$conf_gob4)
+#frqelsoc$conf_gob1)
+#frqelsoc$conf_gob2)
+#frqelsoc$conf_gob3)
+#frqelsoc$conf_gob4)
 
-frq(elsoc$conf_partidos1)
-frq(elsoc$conf_partidos2)
-frq(elsoc$conf_partidos3)
-frq(elsoc$conf_partidos4)
+#frqelsoc$conf_partidos1)
+#frqelsoc$conf_partidos2)
+#frqelsoc$conf_partidos3)
+#frqelsoc$conf_partidos4)
 
-frq(elsoc$conf_carab1)
-frq(elsoc$conf_carab2)
-frq(elsoc$conf_carab3)
-frq(elsoc$conf_carab4)
+#frqelsoc$conf_carab1)
+#frqelsoc$conf_carab2)
+#frqelsoc$conf_carab3)
+#frqelsoc$conf_carab4)
 
-frq(elsoc$conf_pjudicial1)
-frq(elsoc$conf_pjudicial2)
-frq(elsoc$conf_pjudicial3)
-frq(elsoc$conf_pjudicial4)
+#frqelsoc$conf_pjudicial1)
+#frqelsoc$conf_pjudicial2)
+#frqelsoc$conf_pjudicial3)
+#frqelsoc$conf_pjudicial4)
 
-frq(elsoc$conf_emppriv1)
-frq(elsoc$conf_emppriv2)
-frq(elsoc$conf_emppriv3)
-frq(elsoc$conf_emppriv4)
+#frqelsoc$conf_emppriv1)
+#frqelsoc$conf_emppriv2)
+#frqelsoc$conf_emppriv3)
+#frqelsoc$conf_emppriv4)
 
-frq(elsoc$conf_congreso1)
-frq(elsoc$conf_congreso2)
-frq(elsoc$conf_congreso3)
-frq(elsoc$conf_congreso4)
+#frqelsoc$conf_congreso1)
+#frqelsoc$conf_congreso2)
+#frqelsoc$conf_congreso3)
+#frqelsoc$conf_congreso4)
 
-frq(elsoc$conf_presidente1)
-frq(elsoc$conf_presidente2)
-frq(elsoc$conf_presidente3)
-frq(elsoc$conf_presidente4)
+#frqelsoc$conf_presidente1)
+#frqelsoc$conf_presidente2)
+#frqelsoc$conf_presidente3)
+#frqelsoc$conf_presidente4)
+
+## Label 
+
+elsoc$conf_sin1 <- sjlabelled::set_label(elsoc$conf_sin1, label = "Trust in Unions T1")
+elsoc$conf_sin2 <- sjlabelled::set_label(elsoc$conf_sin2, label = "Trust in Unions T2")
+elsoc$conf_sin3 <- sjlabelled::set_label(elsoc$conf_sin3, label = "Trust in Unions T3")
+elsoc$conf_sin4 <- sjlabelled::set_label(elsoc$conf_sin4, label = "Trust in Unions T4")
+
 
 ## 4.2 SDO ------------
 
 ## See frequencies
 
-frq(elsoc$dom_soc_ideal1)
-frq(elsoc$dom_soc_ideal2)
-frq(elsoc$dom_soc_ideal3)
-frq(elsoc$dom_soc_ideal4)
+#frqelsoc$dom_soc_ideal1)
+#frqelsoc$dom_soc_ideal2)
+#frqelsoc$dom_soc_ideal3)
+#frqelsoc$dom_soc_ideal4)
 
-# frq(elsoc$dom_grupos_inferiores1) # No existe
-# frq(elsoc$dom_grupos_inferiores2)
-# frq(elsoc$dom_grupos_inferiores3)
-# frq(elsoc$dom_grupos_inferiores4)
+# #frqelsoc$dom_grupos_inferiores1) # No existe
+# #frqelsoc$dom_grupos_inferiores2)
+# #frqelsoc$dom_grupos_inferiores3)
+# #frqelsoc$dom_grupos_inferiores4)
 
-frq(elsoc$dom_oportunidad_exito1)
-frq(elsoc$dom_oportunidad_exito2)
-frq(elsoc$dom_oportunidad_exito3)
-frq(elsoc$dom_oportunidad_exito4)
+#frqelsoc$dom_oportunidad_exito1)
+#frqelsoc$dom_oportunidad_exito2)
+#frqelsoc$dom_oportunidad_exito3)
+#frqelsoc$dom_oportunidad_exito4)
 
-frq(elsoc$dom_condiciones_iguales1)
-frq(elsoc$dom_condiciones_iguales2)
-frq(elsoc$dom_condiciones_iguales3)
-frq(elsoc$dom_condiciones_iguales4)
+#frqelsoc$dom_condiciones_iguales1)
+#frqelsoc$dom_condiciones_iguales2)
+#frqelsoc$dom_condiciones_iguales3)
+#frqelsoc$dom_condiciones_iguales4)
 
 
 ## Recode
@@ -361,20 +369,20 @@ elsoc$dom_condiciones_iguales4 <- set_labels(elsoc$dom_condiciones_iguales4, lab
 
 ## See frequencies post-rec
 
-frq(elsoc$dom_soc_ideal1)
-frq(elsoc$dom_soc_ideal2)
-frq(elsoc$dom_soc_ideal3)
-frq(elsoc$dom_soc_ideal4)
+#frqelsoc$dom_soc_ideal1)
+#frqelsoc$dom_soc_ideal2)
+#frqelsoc$dom_soc_ideal3)
+#frqelsoc$dom_soc_ideal4)
 
-frq(elsoc$dom_oportunidad_exito1)
-frq(elsoc$dom_oportunidad_exito2)
-frq(elsoc$dom_oportunidad_exito3)
-frq(elsoc$dom_oportunidad_exito4)
+#frqelsoc$dom_oportunidad_exito1)
+#frqelsoc$dom_oportunidad_exito2)
+#frqelsoc$dom_oportunidad_exito3)
+#frqelsoc$dom_oportunidad_exito4)
 
-frq(elsoc$dom_condiciones_iguales1)
-frq(elsoc$dom_condiciones_iguales2)
-frq(elsoc$dom_condiciones_iguales3)
-frq(elsoc$dom_condiciones_iguales4)
+#frqelsoc$dom_condiciones_iguales1)
+#frqelsoc$dom_condiciones_iguales2)
+#frqelsoc$dom_condiciones_iguales3)
+#frqelsoc$dom_condiciones_iguales4)
 
 
 ## Create index
@@ -411,17 +419,17 @@ elsoc <- elsoc %>% rowwise() %>% mutate(dom_index4 = sum(dom_soc_ideal4,
 
 ## Label
 
-elsoc$dom_index1 <- sjlabelled::set_label(elsoc$dom_index1, "SDO Index T1")
-elsoc$dom_index2 <- sjlabelled::set_label(elsoc$dom_index2, "SDO Index T2")
-elsoc$dom_index3 <- sjlabelled::set_label(elsoc$dom_index3, "SDO Index T3")
-elsoc$dom_index4 <- sjlabelled::set_label(elsoc$dom_index4, "SDO Index T4")
+elsoc$dom_index1 <- sjlabelled::set_label(elsoc$dom_index1, "SDO T1")
+elsoc$dom_index2 <- sjlabelled::set_label(elsoc$dom_index2, "SDO T2")
+elsoc$dom_index3 <- sjlabelled::set_label(elsoc$dom_index3, "SDO T3")
+elsoc$dom_index4 <- sjlabelled::set_label(elsoc$dom_index4, "SDO T4")
 
 ## See frequencies post-rec
 
-frq(elsoc$dom_index1)
-frq(elsoc$dom_index2)
-frq(elsoc$dom_index3)
-frq(elsoc$dom_index4)
+#frqelsoc$dom_index1)
+#frqelsoc$dom_index2)
+#frqelsoc$dom_index3)
+#frqelsoc$dom_index4)
 
 # 4.4. General Trust Index  ----
 
@@ -448,63 +456,63 @@ elsoc <- elsoc %>% rowwise() %>% mutate(conf_index4 = sum(conf_gob4, conf_partid
 
 ## Label
 
-elsoc$conf_index1 <- sjlabelled::set_label(elsoc$conf_index1, "Trust Index T1")
-elsoc$conf_index2 <- sjlabelled::set_label(elsoc$conf_index2, "Trust Index T2")
-elsoc$conf_index3 <- sjlabelled::set_label(elsoc$conf_index3, "Trust Index T3")
-elsoc$conf_index4 <- sjlabelled::set_label(elsoc$conf_index4, "Trust Index T4")
+elsoc$conf_index1 <- sjlabelled::set_label(elsoc$conf_index1, "Trust in Institutions T1")
+elsoc$conf_index2 <- sjlabelled::set_label(elsoc$conf_index2, "Trust in Institutions T2")
+elsoc$conf_index3 <- sjlabelled::set_label(elsoc$conf_index3, "Trust in Institutions T3")
+elsoc$conf_index4 <- sjlabelled::set_label(elsoc$conf_index4, "Trust in Institutions T4")
 
 ## See frequencies post-rec
 
-frq(elsoc$conf_index1)
-frq(elsoc$conf_index2)
-frq(elsoc$conf_index3)
-frq(elsoc$conf_index4)
+#frqelsoc$conf_index1)
+#frqelsoc$conf_index2)
+#frqelsoc$conf_index3)
+#frqelsoc$conf_index4)
 
 # 4.5 Age ----
 
-frq(elsoc$edad1)
-frq(elsoc$edad2)
-frq(elsoc$edad3)
-frq(elsoc$edad4)
+#frqelsoc$edad1)
+#frqelsoc$edad2)
+#frqelsoc$edad3)
+#frqelsoc$edad4)
 
 # 4.6 Sex -----
 
-frq(elsoc$sexo1)
-frq(elsoc$sexo2)
-frq(elsoc$sexo3)
-frq(elsoc$sexo4)
+#frqelsoc$sexo1)
+#frqelsoc$sexo2)
+#frqelsoc$sexo3)
+#frqelsoc$sexo4)
 
 # 4.7 Education ----
 
-frq(elsoc$educ1)
-frq(elsoc$educ2)
-frq(elsoc$educ3)
-frq(elsoc$educ4)
+#frqelsoc$educ1)
+#frqelsoc$educ2)
+#frqelsoc$educ3)
+#frqelsoc$educ4)
 
 elsoc <- elsoc %>% 
   mutate_at(vars(starts_with("educ")),
             ~ car::recode(., "c(-666,-777,-888,-999) = NA"))
 
-frq(elsoc$educ1)
-frq(elsoc$educ2)
-frq(elsoc$educ3)
-frq(elsoc$educ4)
+#frqelsoc$educ1)
+#frqelsoc$educ2)
+#frqelsoc$educ3)
+#frqelsoc$educ4)
 
 # 4.8 Income ----
 
-frq(elsoc$ingresos1)
-frq(elsoc$ingresos2)
-frq(elsoc$ingresos3)
-frq(elsoc$ingresos4)
+#frqelsoc$ingresos1)
+#frqelsoc$ingresos2)
+#frqelsoc$ingresos3)
+#frqelsoc$ingresos4)
 
 elsoc <- elsoc %>% 
   mutate_at(vars(starts_with("ingresos")),
             ~ car::recode(., "c(-666,-777,-888,-999) = NA"))
 
-frq(elsoc$ingresos1)
-frq(elsoc$ingresos2)
-frq(elsoc$ingresos3)
-frq(elsoc$ingresos4)
+#frqelsoc$ingresos1)
+#frqelsoc$ingresos2)
+#frqelsoc$ingresos3)
+#frqelsoc$ingresos4)
 
 ## Make income brackets
 
@@ -535,10 +543,10 @@ elsoc <- elsoc %>%
                           else = 20
                           "))
 
-frq(elsoc$ingresos1)
-frq(elsoc$ingresos2)
-frq(elsoc$ingresos3)
-frq(elsoc$ingresos4)
+#frqelsoc$ingresos1)
+#frqelsoc$ingresos2)
+#frqelsoc$ingresos3)
+#frqelsoc$ingresos4)
 
 # 4.9 Ideología ----
 
@@ -546,10 +554,10 @@ elsoc <- elsoc %>%
   mutate_at(vars(starts_with("ideol")),
             ~ car::recode(., "c(-666,-777,-888,-999,11,12) = NA"))
 
-frq(elsoc$ideol1)
-frq(elsoc$ideol2)
-frq(elsoc$ideol3)
-frq(elsoc$ideol4)
+#frqelsoc$ideol1)
+#frqelsoc$ideol2)
+#frqelsoc$ideol3)
+#frqelsoc$ideol4)
 
 # 5. Save database ----------------
 
