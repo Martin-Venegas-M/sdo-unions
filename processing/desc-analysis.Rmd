@@ -1,0 +1,142 @@
+---
+title: |
+  ![](../input/images/logo_coes.png){width=25% height=25%}  
+  Descriptive Analysis Document
+  
+subtitle: _Trusting unions, decreasing social dominance orientation: longitudinal evidence_
+author: 
+  - Research Assistant
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+knit: (function(inputFile, encoding) {
+      out_dir <- "../../output/docs/Descriptive Analysis Document";
+      rmarkdown::render(inputFile,
+                        encoding=encoding,
+                        output_dir=file.path(dirname(inputFile), out_dir))})
+output:
+    bookdown::html_document2:
+          theme: yeti
+          toc: yes
+          toc_float: yes
+          toc_collapsed: yes
+          number_sections: yes
+          
+          
+    
+linkcolor: black
+urlcolor: blue
+link-citations: yes
+---
+
+<style type="text/css">
+
+h1, h2 {
+  font-size: 38px;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 18px;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  text-align: center;
+}
+</style>
+
+```{r include=FALSE}
+## Carga de paquetes
+if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
+pacman::p_load(tidyverse,
+               sjlabelled,
+               DT,
+               summarytools,
+               officer,
+               sjmisc,
+               flextable,
+               sjPlot,
+               ggplot2,
+               scales,
+               ggpubr,
+               knitr,
+               table1,
+               stargazer,
+               ascTools) # librerias
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment=NA, prompt=FALSE, cache=FALSE, echo=FALSE, results='asis', message = F, warning = F)
+summarytools::st_options(bootstrap.css     = FALSE,
+           plain.ascii       = FALSE,   
+           style             = "rmarkdown",
+           dfSummary.silent  = TRUE, 
+           footnote          = NA,
+           subtitle.emphasis = FALSE,
+           headings =  F,
+           lang =  "es")
+summarytools::st_css()
+```
+
+```{r}
+sjPlot::set_theme(
+  base = theme_classic(),
+  axis.tickslen = 0, # hides tick marks
+  axis.title.size = .9,
+  axis.textsize = .9,
+  legend.size = .7,
+  legend.title.size = .8,
+  geom.label.size = 3.5
+)
+```
+
+```{r}
+# Cargar base
+elsoc <- readRDS("../input/data/proc/elsoc_dom_index.RDS")
+```
+
+
+# Introduction
+
+<div style="text-align: justify">
+
+The present document contains descriptive analysis for article _Trusting unions, decreasing social dominance orientation: longitudinal evidence_.
+
+# Analysis
+
+We start replicating the descriptive analysis with the new procesed database.
+
+
+```{r}
+cols <- c(paste0("dom_index", 1:4),
+          paste0("conf_sin", 1:4))
+
+tab_desc <- data.frame(
+  Variable = c(paste0("SDO T", 1:4), paste0("Trust in Unions T", 1:4)),
+  Mean = sapply(elsoc[cols], mean, na.rm = TRUE),
+  SD = sapply(elsoc[cols], sd, na.rm = TRUE),
+  Min = sapply(elsoc[cols], min, na.rm = TRUE),
+  Max = sapply(elsoc[cols], max, na.rm = TRUE),
+  Median = sapply(elsoc[cols], median, na.rm = TRUE)
+)
+
+View(tab_desc
+     )
+```
+
+```{r}
+tab_corr(
+  select(
+    elsoc,
+    dom_index1,
+    dom_index2,
+    dom_index3,
+    dom_index4,
+    conf_sin1,
+    conf_sin2,
+    conf_sin3,
+    conf_sin4,
+  ),
+  triangle = "lower"
+)
+```
+
+
