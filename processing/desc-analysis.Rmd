@@ -3,7 +3,7 @@ title: |
   ![](../input/images/logo_coes.png){width=25% height=25%}  
   Descriptive Analysis Document
   
-subtitle: _Trusting unions, decreasing social dominance orientation: longitudinal evidence_
+subtitle: "Trusting unions, decreasing social dominance orientation: longitudinal evidence"
 author: 
   - Research Assistant
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
@@ -47,20 +47,8 @@ h4.date { /* Header 4 - and the author and data headers use this too  */
 ## Carga de paquetes
 if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
 pacman::p_load(tidyverse,
-               sjlabelled,
-               DT,
-               summarytools,
-               officer,
                sjmisc,
-               flextable,
-               sjPlot,
-               ggplot2,
-               scales,
-               ggpubr,
-               knitr,
-               table1,
-               stargazer,
-               ascTools) # librerias
+               sjPlot) # librerias
 ```
 
 ```{r setup, include=FALSE}
@@ -73,7 +61,6 @@ summarytools::st_options(bootstrap.css     = FALSE,
            subtitle.emphasis = FALSE,
            headings =  F,
            lang =  "es")
-summarytools::st_css()
 ```
 
 ```{r}
@@ -104,6 +91,7 @@ The present document contains descriptive analysis for article _Trusting unions,
 
 We start replicating the descriptive analysis with the new procesed database.
 
+## Descriptive Statistics of SDO Index and Trust in Unions
 
 ```{r}
 cols <- c(paste0("dom_index", 1:4),
@@ -118,9 +106,10 @@ tab_desc <- data.frame(
   Median = sapply(elsoc[cols], median, na.rm = TRUE)
 )
 
-View(tab_desc
-     )
+tab_desc
 ```
+
+## Correlations between SDO Index and Trust in Unions across time
 
 ```{r}
 tab_corr(
@@ -137,6 +126,101 @@ tab_corr(
   ),
   triangle = "lower"
 )
+```
+
+## Correlations between SDO items at Time 1
+
+```{r}
+cor_sdo_items1 <- tab_corr(
+  select(
+    elsoc,
+    dom_soc_ideal1,
+    dom_oportunidad_exito1,
+    dom_condiciones_iguales1
+  ),
+  triangle = "lower"
+)
+
+cor_sdo_items1
+```
+
+## Correlations between SDO items at Time 2
+
+```{r}
+cor_sdo_items2 <- tab_corr(
+  select(
+    elsoc,
+    dom_soc_ideal2,
+    dom_grupos_inferiores2,
+    dom_oportunidad_exito2,
+    dom_condiciones_iguales2
+  ),
+  triangle = "lower"
+)
+
+cor_sdo_items2
+```
+
+## Correlations between SDO items at Time 3
+
+```{r}
+cor_sdo_items3 <- tab_corr(
+  select(
+    elsoc,
+    dom_soc_ideal3,
+    dom_grupos_inferiores3,
+    dom_oportunidad_exito3,
+    dom_condiciones_iguales3
+  ),
+  triangle = "lower"
+)
+
+cor_sdo_items3
+```
+
+## Correlations between SDO items at Time 4
+
+```{r}
+cor_sdo_items4 <- tab_corr(
+  select(
+    elsoc,
+    dom_soc_ideal4,
+    dom_grupos_inferiores4,
+    dom_oportunidad_exito4,
+    dom_condiciones_iguales4
+  ),
+  triangle = "lower"
+)
+
+cor_sdo_items4
+```
+
+```{r}
+
+elsoc_long <- full_join(
+
+elsoc_long_conf <- elsoc %>% select(idencuesta, starts_with("conf_sin")) %>%
+  pivot_longer(cols = starts_with("conf_sin"),
+               names_to = "time",
+               values_to = "conf_sin") %>% mutate(
+                 time = str_sub(time, start= -1)
+               )
+
+,
+
+elsoc_long_conf <- elsoc %>% select(idencuesta, starts_with("dom_index")) %>%
+  pivot_longer(cols = starts_with("dom_index"),
+               names_to = "time",
+               values_to = "dom_index") %>% mutate(
+                 time = str_sub(time, start= -1)
+               )
+
+
+)
+
+ggplot(elsoc_long, aes(x=conf_sin, y=dom_index, shape=time, color = time)) +
+  geom_point() +
+  geom_smooth(method=lm)
 ```
 
 
