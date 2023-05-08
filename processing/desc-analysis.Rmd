@@ -49,6 +49,10 @@ if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
 pacman::p_load(tidyverse,
                sjmisc,
                sjPlot) # librerias
+
+cv <- function(x){
+  sd(x, na.rm = T)/mean(x, na.rm = T)
+}
 ```
 
 ```{r setup, include=FALSE}
@@ -101,6 +105,7 @@ tab_desc <- data.frame(
   Variable = c(paste0("SDO T", 1:4), paste0("Trust in Unions T", 1:4)),
   Mean = sapply(elsoc[cols], mean, na.rm = TRUE),
   SD = sapply(elsoc[cols], sd, na.rm = TRUE),
+  CV = sapply(elsoc[cols], cv),
   Min = sapply(elsoc[cols], min, na.rm = TRUE),
   Max = sapply(elsoc[cols], max, na.rm = TRUE),
   Median = sapply(elsoc[cols], median, na.rm = TRUE)
@@ -193,34 +198,6 @@ cor_sdo_items4 <- tab_corr(
 )
 
 cor_sdo_items4
-```
-
-```{r}
-
-elsoc_long <- full_join(
-
-elsoc_long_conf <- elsoc %>% select(idencuesta, starts_with("conf_sin")) %>%
-  pivot_longer(cols = starts_with("conf_sin"),
-               names_to = "time",
-               values_to = "conf_sin") %>% mutate(
-                 time = str_sub(time, start= -1)
-               )
-
-,
-
-elsoc_long_conf <- elsoc %>% select(idencuesta, starts_with("dom_index")) %>%
-  pivot_longer(cols = starts_with("dom_index"),
-               names_to = "time",
-               values_to = "dom_index") %>% mutate(
-                 time = str_sub(time, start= -1)
-               )
-
-
-)
-
-ggplot(elsoc_long, aes(x=conf_sin, y=dom_index, shape=time, color = time)) +
-  geom_point() +
-  geom_smooth(method=lm)
 ```
 
 
