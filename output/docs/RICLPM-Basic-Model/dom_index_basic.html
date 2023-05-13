@@ -1736,7 +1736,7 @@ border-radius: 0px;
 RI-CLPM Basic Model: SDO &amp; Trust in Trade Unions</p></h1>
 <h3 class="subtitle"><em>Mini Coes Project - Jutification of Inequality &amp; Trust in Trade Unions</em></h3>
 <h4 class="author">Research Asisstant</h4>
-<h4 class="date">20/01/2023</h4>
+<h4 class="date">13/05/2023</h4>
 
 </div>
 
@@ -1758,6 +1758,7 @@ text-align: center;
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>This document contains the basic model for RI-CLPM analysis for article about social dominance orientations and trust in trade unions. First, fit measures are showed for all calculated models. Second, fit mesasures of unconstrained and constrained models are compared. Third, fit measures are compared between models. Fourth, coefficients of the chosen model are interpretated. At the end of the document principal findigs are synthetized.</p>
+<p>&lt;environment: R_GlobalEnv&gt;</p>
 </div>
 <div id="analysis" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Analysis</h1>
@@ -2840,13 +2841,13 @@ ci.upper
 <tbody>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX1
+dep1
 </td>
 <td style="text-align:right;">
 0.067
@@ -2869,13 +2870,13 @@ DOM_INDEX1
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS1
+indep1
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.007
@@ -2898,13 +2899,13 @@ CS1
 </tr>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:right;">
 0.060
@@ -2927,13 +2928,13 @@ DOM_INDEX2
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-CS2
+indep2
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 -0.044
@@ -2956,13 +2957,13 @@ CS2
 </tr>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX4
+dep4
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:right;">
 0.040
@@ -2985,13 +2986,13 @@ DOM_INDEX3
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-DOM_INDEX4
+dep4
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-CS3
+indep3
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 -0.035
@@ -3014,13 +3015,13 @@ CS3
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS2
+indep2
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX1
+dep1
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 0.027
@@ -3043,13 +3044,13 @@ DOM_INDEX1
 </tr>
 <tr>
 <td style="text-align:left;">
-CS2
+indep2
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS1
+indep1
 </td>
 <td style="text-align:right;">
 0.053
@@ -3072,13 +3073,13 @@ CS1
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS3
+indep3
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.019
@@ -3101,13 +3102,13 @@ DOM_INDEX2
 </tr>
 <tr>
 <td style="text-align:left;">
-CS3
+indep3
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS2
+indep2
 </td>
 <td style="text-align:right;">
 0.100
@@ -3130,13 +3131,13 @@ CS2
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS4
+indep4
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.030
@@ -3159,13 +3160,13 @@ DOM_INDEX3
 </tr>
 <tr>
 <td style="text-align:left;">
-CS4
+indep4
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS3
+indep3
 </td>
 <td style="text-align:right;">
 0.083
@@ -3188,7 +3189,7 @@ CS3
 </tr>
 </tbody>
 </table>
-<p>At the Table <a href="#tab:w1">2.5</a> estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of -0.035 in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of -0.044.</p>
+<p>At the Table <a href="#tab:w1">2.5</a> estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of .</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bw2">Table 2.6: </span>D2 model interpretations of between components
@@ -3353,13 +3354,13 @@ ci.upper
 <tbody>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX1
+dep1
 </td>
 <td style="text-align:right;">
 0.054
@@ -3382,13 +3383,13 @@ DOM_INDEX1
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-CS1
+indep1
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 -0.029
@@ -3411,13 +3412,13 @@ CS1
 </tr>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:right;">
 0.054
@@ -3440,13 +3441,13 @@ DOM_INDEX2
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-CS2
+indep2
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 -0.029
@@ -3469,13 +3470,13 @@ CS2
 </tr>
 <tr>
 <td style="text-align:left;">
-DOM_INDEX4
+dep4
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:right;">
 0.054
@@ -3498,13 +3499,13 @@ DOM_INDEX3
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-DOM_INDEX4
+dep4
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
-CS3
+indep3
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #9CE599 !important;">
 -0.029
@@ -3527,13 +3528,13 @@ CS3
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS2
+indep2
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX1
+dep1
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.012
@@ -3556,13 +3557,13 @@ DOM_INDEX1
 </tr>
 <tr>
 <td style="text-align:left;">
-CS2
+indep2
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS1
+indep1
 </td>
 <td style="text-align:right;">
 0.075
@@ -3585,13 +3586,13 @@ CS1
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS3
+indep3
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX2
+dep2
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.012
@@ -3614,13 +3615,13 @@ DOM_INDEX2
 </tr>
 <tr>
 <td style="text-align:left;">
-CS3
+indep3
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS2
+indep2
 </td>
 <td style="text-align:right;">
 0.075
@@ -3643,13 +3644,13 @@ CS2
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-CS4
+indep4
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 ~
 </td>
 <td style="text-align:left;font-weight: bold;color: white !important;background-color: #E37383 !important;">
-DOM_INDEX3
+dep3
 </td>
 <td style="text-align:right;font-weight: bold;color: white !important;background-color: #E37383 !important;">
 -0.012
@@ -3672,13 +3673,13 @@ DOM_INDEX3
 </tr>
 <tr>
 <td style="text-align:left;">
-CS4
+indep4
 </td>
 <td style="text-align:left;">
 ~
 </td>
 <td style="text-align:left;">
-CS3
+indep3
 </td>
 <td style="text-align:right;">
 0.075
@@ -3701,7 +3702,7 @@ CS3
 </tr>
 </tbody>
 </table>
-<p>At the Table <a href="#tab:w2">2.7</a> estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of -0.029 in SDO during the next measurement, controlling for deviations from the expected score in SDO.</p>
+<p>At the Table <a href="#tab:w2">2.7</a> estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of in SDO during the next measurement, controlling for deviations from the expected score in SDO.</p>
 </div>
 </div>
 <div id="synthesis" class="section level1" number="3">
