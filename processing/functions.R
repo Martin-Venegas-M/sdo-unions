@@ -257,7 +257,7 @@ text_con_uno <- function(varx, vary, con_uno){
     
     RI_z ~~ 0*dep1
     RI_z ~~ 0*indep1
-    RI_y ~~ 0*conz1
+    RI_z ~~ 0*conz1
           '
   
   ## Estimating regressions
