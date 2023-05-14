@@ -1,7 +1,7 @@
 ---
 title: |
   ![](../../input/images/logo_coes.png){width=25% height=25%}  
-  RI-CLPM Basic Controls: SDO & Trust in Trade Unions
+  RI-CLPM Controls: SDO & Trust in Trade Unions
   
 subtitle: _Mini Coes Project - Jutification of Inequality & Trust in Trade Unions_
 author: 
@@ -54,7 +54,8 @@ pacman::p_load(tidyverse,
                knitr,
                lavaan,
                kableExtra,
-               effectsize
+               effectsize,
+               parallel
                ) # librerias
 ```
 
@@ -74,7 +75,7 @@ summarytools::st_options(bootstrap.css     = FALSE,
 ```{r}
 # Load data
 
-elsoc <- readRDS("../../input/data/proc/elsoc_dep.RDS")
+elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
 ```
 
 ```{r}
@@ -90,32 +91,41 @@ This document contains control model for RI-CLPM analysis for article about soci
 
 ```{r}
 
-# 7.1 Create text object ------------
+### Estimate
 
-text_object <- create.text.object("conf_sin", "dep", con_uno = "ideol", controls = 1, demo = FALSE)
-
-list2env(text_object, envir = globalenv())
-
-
-# 7.2 Create GOF ----------------
-
-### Vector with models
 models <- c("a1","a2","b1","b2","c1","c2","d1","d2")
 
-### Estimate each model within a for loop
+cl <-
+  makeCluster(detectCores()) # create cluster with all available cores
+fit <- parLapply(cl, models, function(model) {
+  
+  elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
+  source("../functions.R", encoding = "UTF-8")
+  text_object <-
+    create.text.object(
+      "conf_sin",
+      "dom_index",
+      con_uno = "ideol",
+      controls = 1,
+      demo = FALSE
+    )
+  list2env(text_object, envir = globalenv())
+  models <- c("a1", "a2", "b1", "b2", "c1", "c2", "d1", "d2")
+  lavaan::lavaan(
+    model = c(bwcomp, get(model), varcov),
+    data = elsoc,
+    estimator = "MLR",
+    missing = "FIML",
+    meanstructure = T,
+    int.ov.free = T
+  )
+})
+stopCluster(cl) # stop the cluster when finished
 
-fit <- list() # Create empty list for storing lavaan objects
-
-for (i in models){
-  fit[[i]] <- lavaan(model = c(bwcomp,get(i),varcov),
-                     data = elsoc,
-                     estimator = "MLR",
-                     missing = "FIML",
-                     meanstructure = T,
-                     int.ov.free = T) # Execute estimate
-}
 
 ### Save the GOFs of each model in a list from a for loop.
+
+names(fit) <- c("a1", "a2", "b1", "b2", "c1", "c2", "d1", "d2")
 
 gofdt <- list() # Crear lista vacia
 
@@ -167,7 +177,7 @@ kableExtra::kable(gofdt,digits = 3,
                   caption = "Fit measueres for RI-CLPM models between SDO & Trust in Trade Unions") %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
 ```
 
-At the Table \@ref(tab:fit) fit measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.99.
+At the Table \@ref(tab:fit) fit measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.9.
 
 ```{r fit-comp}
 kableExtra::kable(comp1,digits = 3,
@@ -230,7 +240,7 @@ kable(param_d2_regs,
   row_spec(which(param_d2_regs$pvalue < 0.05), bold = T, color = "white", background = "#9CE599")
 ```
 
-At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of `r round(param_d2$est[param_d2$lhs == "dep4" & param_d1$rhs == "indep3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in SDO.
+At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of `r round(param_d2$est[param_d2$lhs == "dep4" & param_d1$rhs == "indep3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in SDO .
 
 # Synthesis
 
