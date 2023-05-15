@@ -46,7 +46,8 @@ h4.date { /* Header 4 - and the author and data headers use this too  */
 ```{r include=FALSE}
 ## Load packages
 
-if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
+if (!require("pacman"))
+  install.packages("pacman")  #si falta pacman, instalar
 
 pacman::p_load(tidyverse,
                data.table,
@@ -55,35 +56,30 @@ pacman::p_load(tidyverse,
                lavaan,
                kableExtra,
                effectsize,
-               parallel
-               ) # librerias
+               parallel) # librerias
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(comment=NA, prompt=FALSE, cache=FALSE, echo=FALSE, results='asis', message = F, warning = F)
-summarytools::st_options(bootstrap.css     = FALSE,
-           plain.ascii       = FALSE,   
-           style             = "rmarkdown",
-           dfSummary.silent  = TRUE, 
-           footnote          = NA,
-           subtitle.emphasis = FALSE,
-           headings =  F,
-           lang =  "es")
-
+knitr::opts_chunk$set(
+  comment = NA,
+  prompt = FALSE,
+  cache = FALSE,
+  echo = FALSE,
+  results = 'asis',
+  message = F,
+  warning = F
+)
 ```
 
 ```{r}
 # Load data
-
 elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
 ```
 
 ```{r}
-# Cargar funciones
-
+# Load functions
 source("../functions.R", encoding = "UTF-8")
 ```
-
 
 # Introduction
 
@@ -91,17 +87,19 @@ This document contains control model for RI-CLPM analysis for article about soci
 
 ```{r}
 
-### Estimate
+# 7.1 Estimate models with all cores ------------
 
-models <- c("a1","a2","b1","b2","c1","c2","d1","d2")
+models <- c("a1", "a2", "b1", "b2", "c1", "c2", "d1", "d2") # vector with models names
 
 cl <-
   makeCluster(detectCores()) # create cluster with all available cores
+
+
 fit <- parLapply(cl, models, function(model) {
   
-  elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS")
-  source("../functions.R", encoding = "UTF-8")
-  text_object <-
+  elsoc <- readRDS("../../input/data/proc/elsoc_dom_index.RDS") # load data
+  source("../functions.R", encoding = "UTF-8") # load function for text object
+  text_object <- # create text object
     create.text.object(
       "conf_sin",
       "dom_index",
@@ -109,9 +107,8 @@ fit <- parLapply(cl, models, function(model) {
       controls = 1,
       demo = FALSE
     )
-  list2env(text_object, envir = globalenv())
-  models <- c("a1", "a2", "b1", "b2", "c1", "c2", "d1", "d2")
-  lavaan::lavaan(
+  list2env(text_object, envir = globalenv()) # transfer list elements to global environment
+  lavaan::lavaan( # estimate model
     model = c(bwcomp, get(model), varcov),
     data = elsoc,
     estimator = "MLR",
@@ -122,18 +119,48 @@ fit <- parLapply(cl, models, function(model) {
 })
 stopCluster(cl) # stop the cluster when finished
 
+# 7.2 Save the GOFs of each model in a list from a for loop. ---------------------
 
-### Save the GOFs of each model in a list from a for loop.
+names(fit) <- models
 
-names(fit) <- c("a1", "a2", "b1", "b2", "c1", "c2", "d1", "d2")
+gofdt <- list() # empty list for fit indexes
 
-gofdt <- list() # Crear lista vacia
-
-for (i in names(fit)){
-  x <- fitMeasures(fit[[i]])[c("chisq.scaled","df.scaled","pvalue.scaled","cfi.scaled","tli.scaled","rmsea.scaled",
-                               "srmr_mplus","aic","bic","bic2","logl","npar","scaling.factor.h0")]
-  gofdt[[i]] <- setNames(as.numeric(x),
-                         c("X2","df","pvalue","CFI","TLI","RMSEA","SRMR","AIC","BIC","aBIC","LL","par","LLcorrectf"))} # Extract gof indexes
+for (i in names(fit)) {
+  x <-
+    fitMeasures(fit[[i]])[c(
+      "chisq.scaled",
+      "df.scaled",
+      "pvalue.scaled",
+      "cfi.scaled",
+      "tli.scaled",
+      "rmsea.scaled",
+      "srmr_mplus",
+      "aic",
+      "bic",
+      "bic2",
+      "logl",
+      "npar",
+      "scaling.factor.h0"
+    )]
+  gofdt[[i]] <- setNames(
+    as.numeric(x),
+    c(
+      "X2",
+      "df",
+      "pvalue",
+      "CFI",
+      "TLI",
+      "RMSEA",
+      "SRMR",
+      "AIC",
+      "BIC",
+      "aBIC",
+      "LL",
+      "par",
+      "LLcorrectf"
+    )
+  )
+} # Extract gof indexes
 
 gofdt <- data.table(m=names(gofdt),dplyr::bind_rows(gofdt)) # Transfer to datatable format the gof indexes
 
@@ -149,22 +176,32 @@ gofdt <- gofdt %>% mutate(
 
 ### Test models 1 and 2
 
-comp1 <- gof.comp(data = gofdt, pairs = list(c("a2","a1"),c("b2","b1"),c("c2","c1"),c("d2","d1")))
+comp1 <-
+  gof.comp(data = gofdt, pairs = list(c("a2", "a1"), c("b2", "b1"), c("c2", "c1"), c("d2", "d1")))
 
+### Add interpretation
 comp1 <- comp1 %>% mutate(
   test_cfi_d = ifelse(CFI_D < 0.02, "meet invariance", "do not meet invariance"),
   test_rmsea_d = ifelse(RMSEA_D < 0.03, "meet invariance", "do not meet invariance"),
-) %>% relocate(test_cfi_d, .after = CFI_D) %>% 
+) %>% relocate(test_cfi_d, .after = CFI_D) %>%
   relocate(test_rmsea_d, .after = RMSEA_D)
 
 ### Test models A-D
 
-comp2 <- gof.comp(data = gofdt, pairs = list(c("a2","b2"),c("a2","c2"),c("a2","d2"),c("b2","d2"),c("c2","d2")))
+comp2 <-
+  gof.comp(data = gofdt, pairs = list(
+    c("a2", "b2"),
+    c("a2", "c2"),
+    c("a2", "d2"),
+    c("b2", "d2"),
+    c("c2", "d2")
+  ))
 
+### Add interpretation
 comp2 <- comp2 %>% mutate(
   test_cfi_d = ifelse(CFI_D < 0.02, "meet invariance", "do not meet invariance"),
   test_rmsea_d = ifelse(RMSEA_D < 0.03, "meet invariance", "do not meet invariance"),
-) %>% relocate(test_cfi_d, .after = CFI_D) %>% 
+) %>% relocate(test_cfi_d, .after = CFI_D) %>%
   relocate(test_rmsea_d, .after = RMSEA_D)
 ```
 
@@ -173,23 +210,32 @@ comp2 <- comp2 %>% mutate(
 
 
 ```{r fit}
-kableExtra::kable(gofdt,digits = 3,
-                  caption = "Fit measueres for RI-CLPM models between SDO & Trust in Trade Unions") %>%   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kableExtra::kable(gofdt, digits = 3,
+                  caption = "Fit measueres for RI-CLPM models between SDO & Trust in Trade Unions") %>%   kableExtra::kable_styling(
+                    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                    full_width = T
+                  )
 ```
 
 At the Table \@ref(tab:fit) fit measures of all calculated models are showed. In general, all models shows good fit measures, being CFI > 0.9.
 
 ```{r fit-comp}
-kableExtra::kable(comp1,digits = 3,
-                  caption = "Comparison of fit measures (between unconstrained and constrained models)") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kableExtra::kable(comp1, digits = 3,
+                  caption = "Comparison of fit measures (between unconstrained and constrained models)") %>% kableExtra::kable_styling(
+                    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                    full_width = T
+                  )
 
 ```
 
 At the Table \@ref(tab:fit-comp) fit measures of unconstrained and constrained models are showed. Following Rutkowski & Svetina (2014) and Chen (2007) all differences suggest that unconstrained models should be retained (ΔCFI < 0.02, ΔRMSEA < 0.03).
 
 ```{r fit-comp2}
-kable(comp2,digits = 3,
-      caption = "Comparison of fit measures between (models A-D)") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kable(comp2, digits = 3,
+      caption = "Comparison of fit measures between (models A-D)") %>% kableExtra::kable_styling(
+        bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+        full_width = T
+      )
 ```
 
 At the Table \@ref(tab:fit-comp2)
@@ -199,8 +245,12 @@ At the Table \@ref(tab:fit-comp2)
 ```{r bw1}
 param_d1 <- data.table(parameterEstimates(fit[["d1"]]))
 
-kable(param_d1[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
-      caption = "D1 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kable(param_d1[op == "~~" &
+                 rhs %in% c("RI_x", "RI_y"),!"label"], digits = 3,
+      caption = "D1 model interpretations of between components") %>% kableExtra::kable_styling(
+        bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+        full_width = T
+      )
 ```
 
 At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation[^1].
@@ -208,14 +258,21 @@ At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstraine
 [^1]: If the variance were not different from 0, it would mean that there are very few stable differences between units and that each individual fluctuates around the same grand mean over time.
 
 ```{r w1}
-
-param_d1_regs <- param_d1[op=="~", !"label"]
+param_d1_regs <- param_d1[op == "~",!"label"]
 
 kable(param_d1_regs,
       digits = 3,
-      caption = "D1 model interpretations of within components") %>% 
-  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(which(param_d1_regs$pvalue < 0.05), bold = T, color = "white", background = "#9CE599") # Añadir destacado
+      caption = "D1 model interpretations of within components") %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = T
+  ) %>%
+  row_spec(
+    which(param_d1_regs$pvalue < 0.05),
+    bold = T,
+    color = "white",
+    background = "#9CE599"
+  ) # Añadir destacado
 ```
 
 At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed for the unconstrained models. The analysis reveals a negative effect between SDO and trust in trade unions at waves 4, 3 and 1. In details, a deviation of one point above the average level of trust in trade unions at wave 3 predicts a deviation of `r round(param_d1$est[param_d1$lhs == "dep4" & param_d1$rhs == "indep3"],3)` in SDO during wave 4, controlling for deviations from the expected score in SDO. Between wave 2 and 3 de effect is similar, with a coefficient of `r round(param_d1$est[param_d1$lhs == "dep3" & param_d1$rhs == "indep2"],3)`.
@@ -223,21 +280,32 @@ At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed f
 ```{r bw2}
 param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
 
-kable(param_d2[op=="~~" & rhs %in% c("RI_x","RI_y"), !"label"], digits = 3,
-            caption = "D2 model interpretations of between components") %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T)
+kable(param_d2[op == "~~" &
+                 rhs %in% c("RI_x", "RI_y"),!"label"], digits = 3,
+      caption = "D2 model interpretations of between components") %>% kableExtra::kable_styling(
+        bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+        full_width = T
+      )
 ```
 
 At the Table \@ref(tab:bw2) estimates for the random intercepts of constrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation.
 
 ```{r w2}
-
-param_d2_regs <- param_d2[op=="~", !"label"]
+param_d2_regs <- param_d2[op == "~",!"label"]
 
 kable(param_d2_regs,
       digits = 3,
-      caption = "D2 model interpretations of within components") %>% 
-  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = T) %>% 
-  row_spec(which(param_d2_regs$pvalue < 0.05), bold = T, color = "white", background = "#9CE599")
+      caption = "D2 model interpretations of within components") %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = T
+  ) %>%
+  row_spec(
+    which(param_d2_regs$pvalue < 0.05),
+    bold = T,
+    color = "white",
+    background = "#9CE599"
+  )
 ```
 
 At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed for the constrained models. It is observed that a deviation of one point above the average level of trust in trade unions predicts a deviation of `r round(param_d2$est[param_d2$lhs == "dep4" & param_d1$rhs == "indep3"],3)` in SDO during the next measurement, controlling for deviations from the expected score in SDO .
