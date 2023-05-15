@@ -102,10 +102,11 @@ fit <- parLapply(cl, models, function(model) {
   text_object <- # create text object
     create.text.object(
       "conf_sin",
-      "dom_index",
+      "dom_index_two",
       con_uno = "ideol",
-      controls = 1,
-      demo = FALSE
+      con_dos = "educ",
+      controls = 2,
+      demo = TRUE
     )
   list2env(text_object, envir = globalenv()) # transfer list elements to global environment
   lavaan::lavaan( # estimate model
@@ -245,12 +246,20 @@ At the Table \@ref(tab:fit-comp2)
 ```{r bw1}
 param_d1 <- data.table(parameterEstimates(fit[["d1"]]))
 
-kable(param_d1[op == "~~" &
-                 rhs %in% c("RI_x", "RI_y"),!"label"], digits = 3,
+param_d1_bw <-
+  param_d1[op == "~~" & rhs %in% c("RI_x", "RI_y"), !"label"]
+
+kable(param_d1_bw, digits = 3,
       caption = "D1 model interpretations of between components") %>% kableExtra::kable_styling(
         bootstrap_options = c("striped", "hover", "condensed", "responsive"),
         full_width = T
-      )
+      ) %>%
+  row_spec(
+    which(param_d1_bw$pvalue < 0.05),
+    bold = T,
+    color = "white",
+    background = "#9CE599"
+  ) # Añadir destacado
 ```
 
 At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation[^1].
@@ -280,12 +289,20 @@ At the Table \@ref(tab:w1) estimates of the crosslagged regressions are showed f
 ```{r bw2}
 param_d2 <- data.table(parameterEstimates(fit[["d2"]]))
 
-kable(param_d2[op == "~~" &
-                 rhs %in% c("RI_x", "RI_y"),!"label"], digits = 3,
+param_d2_bw <- param_d2[op == "~~" &
+                 rhs %in% c("RI_x", "RI_y"),!"label"]
+
+kable(param_d2_bw, digits = 3,
       caption = "D2 model interpretations of between components") %>% kableExtra::kable_styling(
         bootstrap_options = c("striped", "hover", "condensed", "responsive"),
         full_width = T
-      )
+      ) %>%
+  row_spec(
+    which(param_d2_bw$pvalue < 0.05),
+    bold = T,
+    color = "white",
+    background = "#9CE599"
+  ) # Añadir destacado
 ```
 
 At the Table \@ref(tab:bw2) estimates for the random intercepts of constrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation.
