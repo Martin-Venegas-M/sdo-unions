@@ -8,7 +8,7 @@ author:
   - Research Asisstant
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 knit: (function(inputFile, encoding) {
-      out_dir <- "../../output/docs/RICLPM-Basic-Model";
+      out_dir <- "../../output/docs/RICLPM-Controls-Model";
       rmarkdown::render(inputFile,
                         encoding=encoding,
                         output_dir=file.path(dirname(inputFile), out_dir))})
