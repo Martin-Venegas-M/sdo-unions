@@ -22,3 +22,20 @@ psych:::alpha(dom_t1)
 psych:::alpha(dom_t2)
 psych:::alpha(dom_t3)
 psych:::alpha(dom_t4)
+
+conf_t1 <- elsoc %>% select(starts_with("conf_")) %>% select(ends_with("1")) %>% select(-starts_with("conf_index")) %>% select(-starts_with("conf_sin"))
+conf_t2 <- elsoc %>% select(starts_with("conf_")) %>% select(ends_with("2")) %>% select(-starts_with("conf_index")) %>% select(-starts_with("conf_sin"))
+conf_t3 <- elsoc %>% select(starts_with("conf_")) %>% select(ends_with("3")) %>% select(-starts_with("conf_index")) %>% select(-starts_with("conf_sin"))
+conf_t4 <- elsoc %>% select(starts_with("conf_")) %>% select(ends_with("4")) %>% select(-starts_with("conf_index")) %>% select(-starts_with("conf_sin"))
+
+
+
+ltm::cronbach.alpha(conf_t1,na.rm = T)  
+ltm::cronbach.alpha(conf_t2,na.rm = T)  
+ltm::cronbach.alpha(conf_t3,na.rm = T)  
+ltm::cronbach.alpha(conf_t4,na.rm = T)  
+
+psych:::alpha(conf_t1)
+psych:::alpha(conf_t2)
+psych:::alpha(conf_t3)
+psych:::alpha(conf_t4)
