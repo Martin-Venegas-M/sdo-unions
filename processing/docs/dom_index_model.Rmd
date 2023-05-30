@@ -1,14 +1,14 @@
 ---
 title: |
   ![](../../input/images/logo_coes.png){width=25% height=25%}  
-  RI-CLPM Controls: SDO & Trust in Trade Unions
+  RI-CLPM Model: SDO & Trust in Trade Unions
   
 subtitle: _Mini Coes Project - Jutification of Inequality & Trust in Trade Unions_
 author: 
   - Research Asisstant
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 knit: (function(inputFile, encoding) {
-      out_dir <- "../../output/docs/RICLPM-Controls-Model";
+      out_dir <- "../../output/docs/RICLPM-Model";
       rmarkdown::render(inputFile,
                         encoding=encoding,
                         output_dir=file.path(dirname(inputFile), out_dir))})
@@ -83,7 +83,7 @@ source("../functions.R", encoding = "UTF-8")
 
 # Introduction
 
-This document contains control model for RI-CLPM analysis for article about social dominance orientations and trust in trade unions. First, fit measures are showed for all calculated models. Second, fit mesasures of unconstrained and constrained models are compared. Third, fit measures are compared between models. Fourth, coefficients of the chosen model are interpretated. At the end of the document principal findigs are synthetized.
+This document contains the main model for RI-CLPM analysis for article about social dominance orientations and trust in trade unions. First, fit measures are showed for all calculated models. Second, fit mesasures of unconstrained and constrained models are compared. Third, fit measures are compared between models. Fourth, coefficients of the chosen model are interpretated. At the end of the document principal findigs are synthetized.
 
 ```{r}
 
@@ -237,7 +237,7 @@ kable(comp2, digits = 3,
       )
 ```
 
-At the Table \@ref(tab:fit-comp2)
+At the Table \@ref(tab:fit-comp2) comparisson between models are showed. Following Rutkowski & Svetina (2014) and Chen (2007), al comparisson meet model invarance (ΔCFI < 0.02, ΔRMSEA < 0.03). Therefore, the most parsimonious models can be retained (d2).
 
 ## Interpretations
 
@@ -261,6 +261,8 @@ kable(param_d1_bw, digits = 3,
 ```
 
 At the Table \@ref(tab:bw1), estimates for the random intercepts of unconstrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation[^1].
+
+Also, there is a correlation between random intercepts of both variables. This implies that people who trust more in trust unions, tends to have less orientations to social domination.
 
 [^1]: If the variance were not different from 0, it would mean that there are very few stable differences between units and that each individual fluctuates around the same grand mean over time.
 
@@ -305,6 +307,8 @@ kable(param_d2_bw, digits = 3,
 
 At the Table \@ref(tab:bw2) estimates for the random intercepts of constrained models are showed. Both random intercepts have significant variance. This implies that there are stable differences between individuals with respect to their expected scores in trust in trade unions and social dominance orientation.
 
+Correlation between random intercepts also can be found in the d2 model.
+
 ```{r w2}
 param_d2_regs <- param_d2[op == "~",!"label"]
 
@@ -327,4 +331,7 @@ At the Table \@ref(tab:w2) estimates of the crosslagged regressions are showed f
 
 # Synthesis
 
+```{r}
+save.image(file='../../input/other/executed_models.RData')
+```
 
