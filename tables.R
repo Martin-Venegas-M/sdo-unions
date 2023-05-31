@@ -7,7 +7,7 @@
 #Responsable: Martín Venegas - Research Assistant
 
 # Executive Summary: This script contains the code to create some of the tables that are contained in the article.
-# Fecha: May 01, 2023
+# Fecha: May 30, 2023
 
 
 # 1. Load packages -----------------------------------------------------------
@@ -44,16 +44,16 @@ fits <- with(
     "p < .001",
     "; ",
     "CFI = ",
-    round(CFI, 3),
+    round(CFI, 2),
     "; ",
     "TLI = ",
-    round(TLI, 3),
+    round(TLI, 2),
     "; ",
     "RMSEA = ",
-    round(RMSEA, 3),
+    round(RMSEA, 2),
     "; ",
     "SRMR = ",
-    round(SRMR, 3),
+    round(SRMR, 2),
     "."
   )
 )
@@ -66,8 +66,8 @@ table <- data.frame("Model" = models,
 comp1_vector <- comp1$comp
 
 # Make comparisson paragraph
-deltas1 <- with(comp1, paste0("ΔCFI = ", round(CFI_D, 3), "; ",
-                              "ΔRMSEA = ", round(RMSEA_D, 3), "."))
+deltas1 <- with(comp1, paste0("ΔCFI = ", round(CFI_D, 2), "; ",
+                              "ΔRMSEA = ", round(RMSEA_D, 2), "."))
 
 # 3.2 Make table with comparisson 1 ---------------------------------------
 
@@ -78,8 +78,8 @@ comp1_tab <- data.frame("Model Comparison" = comp1_vector,
 comp2_vector <- comp2$comp
 
 # Make comparisson paragraph
-deltas2 <- with(comp2, paste0("ΔCFI = ", round(CFI_D, 3), "; ",
-                              "ΔRMSEA = ", round(RMSEA_D, 3), "."))
+deltas2 <- with(comp2, paste0("ΔCFI = ", round(CFI_D, 2), "; ",
+                              "ΔRMSEA = ", round(RMSEA_D, 2), "."))
 
 # 3.3 Make table with comparisson 2 ---------------------------------------
 
