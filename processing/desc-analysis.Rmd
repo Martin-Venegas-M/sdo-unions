@@ -48,7 +48,8 @@ h4.date { /* Header 4 - and the author and data headers use this too  */
 if (!require("pacman")) install.packages("pacman")  #si falta pacman, instalar
 pacman::p_load(tidyverse,
                sjmisc,
-               sjPlot) # librerias
+               sjPlot,
+               kableExtra) # librerias
 
 cv <- function(x){
   sd(x, na.rm = T)/mean(x, na.rm = T)
@@ -98,7 +99,7 @@ We start replicating the descriptive analysis with the new procesed database.
 ## Descriptive Statistics of SDO Index and Trust in Unions
 
 ```{r}
-cols <- c(paste0("dom_index", 1:4),
+cols <- c(paste0("dom_index_two", 1:4),
           paste0("conf_sin", 1:4))
 
 tab_desc <- data.frame(
@@ -111,7 +112,20 @@ tab_desc <- data.frame(
   Median = sapply(elsoc[cols], median, na.rm = TRUE)
 )
 
-tab_desc
+tab_desc <- tab_desc %>% mutate(
+  Mean = round(Mean, 2),
+  SD = round(SD, 2),
+  CV = round(CV, 2)
+)
+
+rownames(tab_desc) <- 1:8
+
+tab_desc  %>%
+  kable(caption = "Descriptive analysis") %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = T
+  )
 ```
 
 ## Correlations between SDO Index and Trust in Unions across time
@@ -120,10 +134,10 @@ tab_desc
 tab_corr(
   select(
     elsoc,
-    dom_index1,
-    dom_index2,
-    dom_index3,
-    dom_index4,
+    dom_index_two1,
+    dom_index_two2,
+    dom_index_two3,
+    dom_index_two4,
     conf_sin1,
     conf_sin2,
     conf_sin3,
