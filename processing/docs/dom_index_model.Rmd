@@ -103,8 +103,10 @@ fit <- parLapply(cl, models, function(model) {
     create.text.object(
       "conf_sin",
       "dom_index_two",
-      controls = 0,
-      demo = FALSE
+      con_uno = "ideol",
+      con_dos = "educ",
+      controls = 2,
+      demo = TRUE
     )
   list2env(text_object, envir = globalenv()) # transfer list elements to global environment
   lavaan::lavaan( # estimate model
