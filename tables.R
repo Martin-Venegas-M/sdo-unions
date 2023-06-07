@@ -39,22 +39,21 @@ fits <- with(
     df,
     ")",
     "= ",
-    round(X2, 2),
+    round(X2, 3),
     ", ",
     "p < .001",
     "; ",
     "CFI = ",
-    round(CFI, 2),
+    round(CFI, 3),
     "; ",
     "TLI = ",
-    round(TLI, 2),
+    round(TLI, 3),
     "; ",
     "RMSEA = ",
-    round(RMSEA, 2),
+    round(RMSEA, 3),
     "; ",
     "SRMR = ",
-    round(SRMR, 2),
-    "."
+    round(SRMR, 3)
   )
 )
 
@@ -66,8 +65,8 @@ table <- data.frame("Model" = models,
 comp1_vector <- comp1$comp
 
 # Make comparisson paragraph
-deltas1 <- with(comp1, paste0("ΔCFI = ", round(CFI_D, 2), "; ",
-                              "ΔRMSEA = ", round(RMSEA_D, 2), "."))
+deltas1 <- with(comp1, paste0("ΔCFI = ", round(CFI_D, 3), "; ",
+                              "ΔRMSEA = ", round(RMSEA_D, 3)))
 
 # 3.2 Make table with comparisson 1 ---------------------------------------
 
@@ -78,8 +77,8 @@ comp1_tab <- data.frame("Model Comparison" = comp1_vector,
 comp2_vector <- comp2$comp
 
 # Make comparisson paragraph
-deltas2 <- with(comp2, paste0("ΔCFI = ", round(CFI_D, 2), "; ",
-                              "ΔRMSEA = ", round(RMSEA_D, 2), "."))
+deltas2 <- with(comp2, paste0("ΔCFI = ", round(CFI_D, 3), "; ",
+                              "ΔRMSEA = ", round(RMSEA_D, 3)))
 
 # 3.3 Make table with comparisson 2 ---------------------------------------
 
@@ -91,7 +90,46 @@ comp2_tab <- data.frame("Model Comparison" = comp2_vector,
 comp_tab <- full_join(comp1_tab,
                       comp2_tab)
 
+# 4. Create final table ---------------------------------------------------
 
-# 4. Save tables ----------------------------------------------------------
+## Add blank rows to fit table
+table <- table %>% 
+  add_row(Model = " ", Model.Fit = " ", .after = 2) %>% 
+  add_row(Model = " ", Model.Fit = " ", .after = 3) %>% 
+  add_row(Model = " ", Model.Fit = " ", .after = 4) %>% 
+  add_row(Model = " ", Model.Fit = " ", .after = 7) %>% 
+  add_row(Model = " ", Model.Fit = " ", .after = 10)
+
+## Reorder comparisson table
+comp_tab <- rbind(
+  comp_tab[1, ],
+  comp_tab[5, ],
+  comp_tab[6, ],
+  comp_tab[7, ],
+  comp_tab[2, ],
+  comp_tab[8, ],
+  comp_tab[3, ],
+  comp_tab[9, ],
+  comp_tab[4, ]
+  )
+
+## Add blank rows to comparisson table
+
+comp_tab <- comp_tab %>% 
+  add_row(Model.Comparison = " ", Model.Invariance.Testing = " ", .before = 1) %>% 
+  add_row(Model.Comparison = " ", Model.Invariance.Testing = " ", .after = 5) %>% 
+  add_row(Model.Comparison = " ", Model.Invariance.Testing = " ", .after = 8) %>%
+  add_row(Model.Comparison = " ", Model.Invariance.Testing = " ", .before = 12) 
+
+
+# 4.1 Bind tables ---------------------------------------------------------
+
+paper_tab <- cbind(
+  table,
+  comp_tab
+)
+
+# 5. Save tables ----------------------------------------------------------
 writexl::write_xlsx(table, "output/tables/fit.xlsx")
 writexl::write_xlsx(comp_tab, "output/tables/comp_tab.xlsx")
+writexl::write_xlsx(paper_tab, "output/tables/paper_tab.xlsx")
