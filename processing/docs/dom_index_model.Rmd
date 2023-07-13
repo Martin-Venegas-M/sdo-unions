@@ -2,8 +2,8 @@
 title: |
   ![](../../input/images/logo_coes.png){width=25% height=25%}  
   RI-CLPM Model: SDO & Trust in Trade Unions
-  
-subtitle: _Mini Coes Project - Jutification of Inequality & Trust in Trade Unions_
+
+subtitle: "Trusting unions, decreasing social dominance orientation: longitudinal evidence"
 author: 
   - Research Asisstant
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"

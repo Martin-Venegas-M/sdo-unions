@@ -1,12 +1,11 @@
 
 # 0. Identification ----------------------------------
 #Title: Processing code for a research paper on Social Dominance Orientation and Trust in Unions
-#Description: The article is part of the Mini Coes "Subjective Inequality and Trade Union Support in Latin America". by the post doctoral researcher Juan Diego García Castro and Pablo Perez Ahumada.
 #Institution: Centro de Estudios de Conflicto y Cohesión Social (COES)
-#Responsable: Martín Venegas - Research Assistant
+#Responsable: Research Assistant
 
 # Executive Summary: This script contains the code to create the database needed to elaborate the analyses on Social Dominance Orientation and Trust in Unions.
-# Fecha: May 01, 2023
+# Date: May 01, 2023
 
 # 1. Loas packages --------------------
 
